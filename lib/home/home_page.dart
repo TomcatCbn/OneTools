@@ -1,20 +1,39 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:platform_plugins/platform_plugins.dart';
 import 'package:platform_plugins/platform_plugins_mgmt.dart';
+import 'package:platform_utils/platform_utils.dart';
+import 'package:platform_utils/platform_screenutils.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class OneToolsApp extends StatelessWidget {
+  const OneToolsApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    var homeWidget = const MyHomePage(title: 'Developer Tools Home Page');
+
+    var materialApp = MaterialApp(
       title: 'Developer Tools',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Developer Tools Home Page'),
+      builder: BotToastInit(),
+      navigatorObservers: [BotToastNavigatorObserver()],
+      routes: RouteManager().allRoutes,
+      navigatorKey: navigatorKey,
+      home: homeWidget,
     );
+
+    // 嵌套一个屏幕适配方案
+    var screenUtilInit = ScreenUtilInit(
+      designSize: const Size(360, 690),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      child: materialApp,
+    );
+
+    return screenUtilInit;
   }
 }
 
@@ -47,10 +66,12 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'Developer Tools',
-            ),
-            ..._plugins.map((p) => Text(p.displayName))
+            ..._plugins.map((p) => ElevatedButton(
+                  child: Text(p.displayName),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/code_tools/home');
+                  },
+                ))
           ],
         ),
       ),

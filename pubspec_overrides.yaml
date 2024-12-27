@@ -1,0 +1,8 @@
+# melos_managed_dependency_overrides: code_tools,platform_plugins,platform_utils
+dependency_overrides:
+  code_tools:
+    path: tools/code_tools
+  platform_plugins:
+    path: platform_enabler/platform_plugins
+  platform_utils:
+    path: platform_enabler/platform_utils

@@ -1,0 +1,6 @@
+# melos_managed_dependency_overrides: platform_plugins,platform_utils
+dependency_overrides:
+  platform_plugins:
+    path: ../../platform_enabler/platform_plugins
+  platform_utils:
+    path: ../../platform_enabler/platform_utils

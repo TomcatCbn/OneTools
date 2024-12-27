@@ -16,7 +16,20 @@ dependencies:
   logger: ^2.5.0
   # state management
   flutter_bloc: ^8.1.6
+  freezed_annotation: ^2.4.4
+  # function program
+  dart_either: ^2.0.0
+  # shell process
+  process_runner: ^4.2.0
+  # storage
+  floor: ^1.5.0
+  # 屏幕适配
+  flutter_screenutil: ^5.9.3
+  # file picker
+  file_picker: ^8.1.6
+  path_provider: ^2.1.5
 
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

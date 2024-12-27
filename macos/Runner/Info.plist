@@ -28,5 +28,8 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+    <key>NSFileSystemUsageDescription</key>
+    <string>需要访问文件系统以保存和读取文件</string>
+
 </dict>
 </plist>
