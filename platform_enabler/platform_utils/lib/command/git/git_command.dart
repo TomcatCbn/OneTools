@@ -28,12 +28,6 @@ class GitClone extends GitCMD<bool> {
       return Left(CommonError.paramsInvalid() as E);
     }
 
-    final hasCmd = await ShellUtils.hasShellCmd(_gitCMD);
-
-    if (!hasCmd) {
-      return Left(CommonError.shellCMDNotExist() as E);
-    }
-
     var eitherRes =
         await ShellUtils.execCMD([_gitCMD, _gitCMDClone, repoUrl], workDir);
     return eitherRes.fold(

@@ -1,7 +1,7 @@
 import 'package:logger/logger.dart' as third;
 
 class Logger {
-  static final _logger = third.Logger();
+  static final _logger = third.Logger(printer: third.SimplePrinter());
 
   static void i({String msg = '', String tag = ''}) {
     _logger.i('[INFO][$tag]$msg');

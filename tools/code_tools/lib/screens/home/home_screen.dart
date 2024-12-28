@@ -90,7 +90,7 @@ class _BodyWidget extends StatelessWidget {
           // 2.新增一个project
           context.read<HomeBloc>().add(HomeCreateProjectByJsonFileEvent());
         },
-        child: const Text('添加项目'),
+        child: const Icon(Icons.add),
       ),
     );
     return Stack(

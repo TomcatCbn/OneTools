@@ -15,8 +15,9 @@ class CodeRepoMgmtBloc extends BaseBloc<CodeRepoMgmtEvent, CodeRepoMgmtState> {
   late ProjectAggregate projectAggregate;
 
   CodeRepoMgmtBloc({required this.projectName, required this.projectUseCase})
-      : super(CodeRepoMgmtState()) {
+      : super(const CodeRepoMgmtState()) {
     on<CodeRepoMgmtInitEvent>(_onCodeRepoInitEvent);
+    on<CodeRepoOperationEvent>(_onCodeRepoOperationEvent);
   }
 
   FutureOr<void> _onCodeRepoInitEvent(
@@ -31,19 +32,15 @@ class CodeRepoMgmtBloc extends BaseBloc<CodeRepoMgmtEvent, CodeRepoMgmtState> {
     }
 
     projectAggregate = t;
-    emit(state.copyWith(
-        codeRepos: projectAggregate.codeRepos
-            .map((e) => CodeRepoState(repoName: e.gitEntity.repoDirName))
-            .toList()));
-
     // 检测code repo各个状态
-    toastHelper.showLoading();
-    await projectAggregate.prepare();
-    toastHelper.dismissLoading();
-    emit(state.copyWith(
-        codeRepos: projectAggregate.codeRepos
-            .map((e) => CodeRepoState(
-                repoName: e.gitEntity.repoDirName, branch: e.gitEntity.branch))
-            .toList()));
+    await projectAggregate.config();
+    emit(state.copyWith(codeRepoEntities: projectAggregate.codeRepos));
+  }
+
+  FutureOr<void> _onCodeRepoOperationEvent(
+      CodeRepoOperationEvent event, Emitter<CodeRepoMgmtState> emit) {
+    Logger.i(msg: 'CodeRepoOperationEvent...${event.operation}', tag: _tag);
+
+    toastHelper.showToast(msg: event.operation);
   }
 }

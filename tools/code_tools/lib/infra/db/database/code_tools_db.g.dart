@@ -100,7 +100,7 @@ class _$CodeToolsDatabase extends CodeToolsDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `project` (`project_name` TEXT NOT NULL, `project_desc` TEXT NOT NULL, `work_dir` TEXT NOT NULL, PRIMARY KEY (`project_name`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `code_repo` (`repo_url` TEXT NOT NULL, `project` TEXT NOT NULL, FOREIGN KEY (`project`) REFERENCES `project` (`project_name`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`repo_url`))');
+            'CREATE TABLE IF NOT EXISTS `code_repo` (`repo_url` TEXT NOT NULL, `work_dir` TEXT NOT NULL, `project` TEXT NOT NULL, FOREIGN KEY (`project`) REFERENCES `project` (`project_name`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`repo_url`))');
         await database.execute(
             'CREATE INDEX `index_project_project_name` ON `project` (`project_name`)');
 
@@ -210,6 +210,7 @@ class _$CodeRepoDao extends CodeRepoDao {
             'code_repo',
             (CodeRepoPo item) => <String, Object?>{
                   'repo_url': item.repoUrl,
+                  'work_dir': item.workDir,
                   'project': item.project
                 }),
         _codeRepoPoUpdateAdapter = UpdateAdapter(
@@ -218,6 +219,7 @@ class _$CodeRepoDao extends CodeRepoDao {
             ['repo_url'],
             (CodeRepoPo item) => <String, Object?>{
                   'repo_url': item.repoUrl,
+                  'work_dir': item.workDir,
                   'project': item.project
                 }),
         _codeRepoPoDeletionAdapter = DeletionAdapter(
@@ -226,6 +228,7 @@ class _$CodeRepoDao extends CodeRepoDao {
             ['repo_url'],
             (CodeRepoPo item) => <String, Object?>{
                   'repo_url': item.repoUrl,
+                  'work_dir': item.workDir,
                   'project': item.project
                 });
 
@@ -246,6 +249,7 @@ class _$CodeRepoDao extends CodeRepoDao {
     return _queryAdapter.queryList('SELECT * FROM code_repo',
         mapper: (Map<String, Object?> row) => CodeRepoPo(
             repoUrl: row['repo_url'] as String,
+            workDir: row['work_dir'] as String,
             project: row['project'] as String));
   }
 
@@ -254,6 +258,7 @@ class _$CodeRepoDao extends CodeRepoDao {
     return _queryAdapter.query('SELECT * FROM code_repo WHERE repo_url = ?1',
         mapper: (Map<String, Object?> row) => CodeRepoPo(
             repoUrl: row['repo_url'] as String,
+            workDir: row['work_dir'] as String,
             project: row['project'] as String),
         arguments: [repoUrl]);
   }
@@ -263,6 +268,7 @@ class _$CodeRepoDao extends CodeRepoDao {
     return _queryAdapter.queryList('SELECT * FROM code_repo WHERE project = ?1',
         mapper: (Map<String, Object?> row) => CodeRepoPo(
             repoUrl: row['repo_url'] as String,
+            workDir: row['work_dir'] as String,
             project: row['project'] as String),
         arguments: [project]);
   }

@@ -7,6 +7,7 @@ import 'package:platform_utils/platform_utils.dart';
 import 'home/home_page.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   var codeTools = CodeTools();
   // register lifecycle listener
   PlatformPluginsMgmt().addLifeCycleListener(codeTools.pluginId, codeTools);

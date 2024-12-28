@@ -29,7 +29,12 @@ dependencies:
   file_picker: ^8.1.6
   path_provider: ^2.1.5
 
-  
+  # stream enhance
+  rxdart: ^0.28.0
+  stream_transform: ^2.1.1
+
+  # date format
+  date_format: ^2.0.9
 dev_dependencies:
   flutter_test:
     sdk: flutter

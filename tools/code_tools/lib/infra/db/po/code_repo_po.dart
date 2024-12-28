@@ -1,6 +1,6 @@
-import 'package:code_tools/domain/entities/project.dart';
 import 'package:platform_utils/platform_storage.dart';
 
+import '../../../domain/entities/code_repo.dart';
 import 'project_po.dart';
 
 @Entity(tableName: 'code_repo', indices: [], foreignKeys: [
@@ -15,13 +15,21 @@ class CodeRepoPo {
   @ColumnInfo(name: 'repo_url')
   final String repoUrl;
 
+  @ColumnInfo(name: 'work_dir')
+  final String workDir;
+
   final String project;
 
-  CodeRepoPo({required this.repoUrl, required this.project});
+  CodeRepoPo({
+    required this.repoUrl,
+    required this.workDir,
+    required this.project,
+  });
 
   CodeRepoEntity toDo() {
     return CodeRepoEntity(
         qualityEntity: QualityEntity.empty,
-        gitEntity: GitEntity(gitRepo: repoUrl));
+        gitEntity: GitEntity(gitRepo: repoUrl),
+        workDir: workDir);
   }
 }

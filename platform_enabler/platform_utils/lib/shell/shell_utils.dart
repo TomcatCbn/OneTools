@@ -9,14 +9,16 @@ import '../log/platform_logger.dart';
 /// shell 工具
 class ShellUtils {
   static const String tag = 'ShellUtils';
-  static ProcessRunner processRunner = ProcessRunner();
 
   static Future<bool> hasShellCmd(String command) async {
     Logger.d(msg: 'run check shell cmd, $command', tag: tag);
     // 通过执行指令，检查版本，判断是否存在
     try {
-      final result = await processRunner
-          .runProcess([command, '--version'], printOutput: true);
+      ProcessRunner processRunner = ProcessRunner();
+      ProcessRunnerResult result = await processRunner.runProcess(
+        [command, '--version'],
+        printOutput: true,
+      );
 
       if (result.exitCode == 0) {
         return true;
@@ -30,44 +32,47 @@ class ShellUtils {
     }
   }
 
-  static Future<Either<ShellError, ProcessResult>> execCMD(
+  static Future<Either<ShellError, ProcessExecResult>> execCMD(
     List<String> commandLine,
     Directory workingDirectory,
   ) async {
     Logger.d(msg: 'run shell cmd, $commandLine', tag: tag);
-    var processRunnerResult = await processRunner.runProcess(commandLine,
-        workingDirectory: workingDirectory, printOutput: true);
+    ProcessRunner processRunner = ProcessRunner();
+    ProcessRunnerResult result = await processRunner.runProcess(
+      commandLine,
+      workingDirectory: workingDirectory,
+      printOutput: true,
+    );
+    // ProcessResult result = await Process.run(
+    //     commandLine.first, commandLine.sublist(1),
+    //     workingDirectory: workingDirectory.path);
 
-    if (processRunnerResult.exitCode == 0) {
+    if (result.exitCode == 0) {
       Logger.d(msg: 'run shell cmd success, $commandLine', tag: tag);
       return Either.right(
-          ProcessResult(exitCode: 0, stdout: processRunnerResult.stdout));
+          ProcessExecResult(exitCode: 0, stdout: result.stdout));
     }
 
     Logger.e(msg: 'run shell cmd failed, $commandLine', tag: tag);
-    return Either.left(ShellError(stderr: processRunnerResult.stderr));
-  }
-
-  static Future<bool> enterDir(Directory workingDirectory) async {
-    var processRunnerResult =
-        await processRunner.runProcess(['cd', '${workingDirectory.absolute}']);
-    return processRunnerResult.exitCode == 0;
+    return Either.left(ShellError(stderr: result.stderr));
   }
 }
 
 class ShellError extends ToolsError {
   static const int _baseOfShell = 1000;
 
-  ShellError({String? stderr}) : super(errorCode: _baseOfShell, errorMsg: 'ShellError: $stderr');
+  ShellError({String? stderr})
+      : super(errorCode: _baseOfShell, errorMsg: 'ShellError: $stderr');
 }
 
-class ProcessResult {
+class ProcessExecResult {
   final int exitCode;
 
   final String? stdout;
   final String? stderr;
 
-  ProcessResult({required this.exitCode, this.stdout = '', this.stderr = ''});
+  ProcessExecResult(
+      {required this.exitCode, this.stdout = '', this.stderr = ''});
 
   bool get isSuccess => exitCode == 0;
 }

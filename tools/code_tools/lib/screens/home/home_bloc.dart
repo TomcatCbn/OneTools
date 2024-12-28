@@ -41,22 +41,22 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
   FutureOr<void> _onCreateProjectByJsonFileEvent(
       HomeCreateProjectByJsonFileEvent event, Emitter<HomeState> emit) async {
     try {
-      var filePickerResult = await FilePicker.platform.pickFiles();
+      var filePickerResult = await FilePicker.platform.pickFiles(
+          allowedExtensions: ['json'],
+          allowMultiple: true,
+          type: FileType.custom);
       if (filePickerResult == null) {
-        return;
-      }
-      if (!filePickerResult.isSinglePick) {
-        toastHelper.showToast(msg: 'only support single pick');
         return;
       }
 
       toastHelper.showLoading();
 
-      var file = filePickerResult.xFiles.first;
-      var json = await file.readAsString();
-      var project = projectUseCase.createProjectBy(
-          json, '${settings.workSpace}/${CodeTools().workDirName}');
-      await projectUseCase.addOrUpdateProject(project);
+      for (final file in filePickerResult.xFiles) {
+        var json = await file.readAsString();
+        var project = projectUseCase.createProjectBy(
+            json, '${settings.workSpace}/${CodeTools().workDirName}');
+        await projectUseCase.addOrUpdateProject(project);
+      }
 
       toastHelper.dismissLoading();
       // 重新加载所有的project

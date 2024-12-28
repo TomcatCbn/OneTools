@@ -19,7 +19,10 @@ class ProjectLocalDataSource {
         workDir: project.workDir));
     await codeRepoDao.insertCodeRepos(project.codeRepos.map((e) {
       return CodeRepoPo(
-          repoUrl: e.gitEntity.gitRepo, project: project.projectName);
+        repoUrl: e.gitEntity.gitRepo,
+        project: project.projectName,
+        workDir: e.workDir,
+      );
     }).toList());
 
     return true;
@@ -29,11 +32,11 @@ class ProjectLocalDataSource {
     var pos = await projectDao.findAllProject();
     var projects = pos.map((e) async {
       var codeRepos = await codeRepoDao.findAllCodeRepoBy(e.projectName);
-      return ProjectAggregate(
+      return ProjectAggregate.fromDb(
           projectName: e.projectName,
           projectDesc: e.projectDesc,
           workDir: e.workDir,
-          codeRepos: codeRepos.map((e) => e.toDo()).toList());
+          codeRepoList: codeRepos.map((e) => e.toDo()).toList());
     }).toList();
     var wait = await Future.wait(projects);
     return wait;
@@ -47,11 +50,11 @@ class ProjectLocalDataSource {
 
     var codeRepos = await codeRepoDao.findAllCodeRepoBy(projectName);
 
-    return ProjectAggregate(
+    return ProjectAggregate.fromDb(
         projectName: po.projectName,
         projectDesc: po.projectDesc,
         workDir: po.workDir,
-        codeRepos: codeRepos.map((e) => e.toDo()).toList());
+        codeRepoList: codeRepos.map((e) => e.toDo()).toList());
   }
 
   Future<bool> removeProject(ProjectAggregate project) async {
@@ -61,7 +64,9 @@ class ProjectLocalDataSource {
         workDir: project.workDir));
     project.codeRepos.map((e) {
       codeRepoDao.deleteCodeRepo(CodeRepoPo(
-          repoUrl: e.gitEntity.gitRepo, project: project.projectName));
+          repoUrl: e.gitEntity.gitRepo,
+          project: project.projectName,
+          workDir: e.workDir));
     });
 
     return true;
@@ -77,10 +82,14 @@ class ProjectLocalDataSource {
       bool exist = codeRepoPo != null;
       if (exist) {
         await codeRepoDao.updateCodeRepo(CodeRepoPo(
-            repoUrl: e.gitEntity.gitRepo, project: project.projectName));
+            repoUrl: e.gitEntity.gitRepo,
+            project: project.projectName,
+            workDir: e.workDir));
       } else {
         await codeRepoDao.insertCodeRepo(CodeRepoPo(
-            repoUrl: e.gitEntity.gitRepo, project: project.projectName));
+            repoUrl: e.gitEntity.gitRepo,
+            project: project.projectName,
+            workDir: e.workDir));
       }
     });
     await Future.wait(map);

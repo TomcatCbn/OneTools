@@ -19,3 +19,6 @@ export 'command/i_command.dart';
 
 // toast bridge
 export 'package:platform_utils/toast/i_toast_bridge.dart';
+
+// date format
+export 'package:date_format/date_format.dart';
