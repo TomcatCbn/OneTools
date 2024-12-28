@@ -78,6 +78,42 @@ class GitQueryCurrentBranch extends GitCMD<String> {
   }
 }
 
+class GitQueryAllBranch extends GitCMD<List<String>> {
+  GitQueryAllBranch({required super.workDir});
+
+  @override
+  Future<Either<E, List<String>>> run<E extends ToolsError>() async {
+    var either =
+        await ShellUtils.execCMD([_gitCMD, _gitCMDBranch, '-a'], workDir);
+    if (either.isLeft) {
+      return Left((either as Left).value);
+    }
+    var stdout =
+        ((either as Right<ShellError, ProcessExecResult>).value.stdout ?? '')
+            .trim();
+
+    try {
+      // 解析输出
+      final branches = stdout
+          .toString()
+          .split('\n') // 分割为行
+          .map((line) => line.trim()) // 去除首尾空格
+          .where((line) => line.isNotEmpty) // 过滤掉空行
+          .map((line) {
+        // 处理分支名称
+        if (line.startsWith('*')) {
+          return line.substring(1).trim(); // 去掉当前分支的 '*' 符号
+        }
+        return line;
+      }).toList();
+
+      return Either.right(branches);
+    } catch (e) {
+      return Either.left(ShellError(stderr: '解析resp出错') as E);
+    }
+  }
+}
+
 class GitProxy extends GitCMD<bool> {
   final String proxy;
 

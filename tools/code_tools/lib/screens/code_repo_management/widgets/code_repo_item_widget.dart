@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:platform_utils/platform_logger.dart';
 import 'package:platform_utils/platform_screenutils.dart';
 
 import '../../../domain/entities/code_repo.dart';
@@ -32,7 +33,9 @@ class _CodeRepoItemWidgetState extends State<CodeRepoItemWidget> {
         isUpdating = (data is CodeRepoStatusUpdating);
       });
     });
-    widget.codeRepoEntity.prepare();
+    widget.codeRepoEntity.prepare().then((onValue) {
+      Logger.d(msg: '${widget.codeRepoEntity}');
+    });
   }
 
   @override

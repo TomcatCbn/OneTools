@@ -19,6 +19,8 @@ class CodeRepoEntity {
   /// 自身目录
   final String repoDir;
 
+  String get codeRepoName => gitEntity.repoDirName;
+
   BehaviorSubject<CodeRepoStatus> codeRepoStatus =
       BehaviorSubject.seeded(CodeRepoStatusIdle());
 
@@ -62,6 +64,11 @@ class CodeRepoEntity {
       Logger.e(msg: 'prepare ${gitEntity.repoDirName} failed, $e');
       codeRepoStatus.sink.add(CodeRepoStatusFailed(reason: '$e'));
     }
+  }
+
+  @override
+  String toString() {
+    return 'CodeRepoEntity{gitEntity: $gitEntity, repoDir: $repoDir}';
   }
 }
 
@@ -108,6 +115,17 @@ class GitEntity {
       return true;
     });
 
+    // 并更新所有分支信息
+    var gitBranch = GitQueryAllBranch(workDir: workDir);
+    var queryEither = await gitBranch.run();
+    if (queryEither.isRight) {
+      // 更新
+      List<String> branches = (queryEither as Right).value;
+      allBranches
+        ..clear()
+        ..addAll(branches);
+    }
+
     return res;
   }
 
@@ -134,6 +152,11 @@ class GitEntity {
     });
 
     return res;
+  }
+
+  @override
+  String toString() {
+    return 'GitEntity{branch: $branch, allBranches: $allBranches}';
   }
 }
 
