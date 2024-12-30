@@ -164,7 +164,7 @@ class GitEntity {
         hasLocalBranch = true;
         branch = localBranch;
         // 当前分支已是，则返回成功
-        if(this.branch == localBranch) {
+        if (this.branch == localBranch) {
           return true;
         }
       } catch (e) {
@@ -188,7 +188,10 @@ class GitEntity {
       return true;
     });
 
-    await queryAllBranches(workDir);
+    if (branch.isRemoteBranch) {
+      await queryAllBranches(workDir);
+    }
+
     return res;
   }
 
@@ -229,6 +232,8 @@ class GitEntity {
     }, ifRight: (value) {
       return true;
     });
+
+    await queryAllBranches(Directory('${workDir.path}/$repoDirName'));
 
     return res;
   }
