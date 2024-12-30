@@ -6,10 +6,14 @@ extension StrExt on String {
   }
 
   String get toLocalBranch {
-    if (startsWith('remotes/origin/')) {
+    if (isRemoteBranch) {
       var branchLocal = substring('remotes/origin/'.length);
       return branchLocal;
     }
     return this;
+  }
+
+  bool get isRemoteBranch {
+    return startsWith('remotes/origin/');
   }
 }

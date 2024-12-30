@@ -153,20 +153,42 @@ class GitEntity {
   /// [branch] 目标分支
   Future<bool> checkout(Directory workDir, String branch) async {
     // 如果本地已存在branch，则改为本地分支，不然git指令会报错
-    allBranches.contains(branch);
-    var localBranch = branch.toLocalBranch;
-    if (allBranches.contains(localBranch)) {
-      branch = localBranch;
+    GitCheckout gitCMD;
+    if (branch.isRemoteBranch) {
+      var localBranch = branch.toLocalBranch;
+      bool hasLocalBranch = false;
+      try {
+        allBranches.firstWhere((e) {
+          return e == localBranch;
+        });
+        hasLocalBranch = true;
+        branch = localBranch;
+        // 当前分支已是，则返回成功
+        if(this.branch == localBranch) {
+          return true;
+        }
+      } catch (e) {
+        // ignore
+      }
+      gitCMD = GitCheckout(
+          workDir: workDir,
+          branchName: branch,
+          newBranchName: localBranch,
+          hasLocalBranch: hasLocalBranch);
+    } else {
+      gitCMD = GitCheckout(
+          workDir: workDir, branchName: branch, hasLocalBranch: true);
     }
 
-    var gitCMD = GitCheckout(workDir: workDir, branchName: branch);
     var either = await gitCMD.run();
     bool res = either.fold(ifLeft: (value) {
       return false;
     }, ifRight: (value) {
-      this.branch = branch;
+      this.branch = branch.toLocalBranch;
       return true;
     });
+
+    await queryAllBranches(workDir);
     return res;
   }
 
@@ -181,15 +203,7 @@ class GitEntity {
     });
 
     // 并更新所有分支信息
-    var gitBranch = GitQueryAllBranch(workDir: workDir);
-    var queryEither = await gitBranch.run();
-    if (queryEither.isRight) {
-      // 更新
-      List<String> branches = (queryEither as Right).value;
-      allBranches
-        ..clear()
-        ..addAll(branches);
-    }
+    await queryAllBranches(workDir);
 
     return res;
   }
@@ -217,6 +231,19 @@ class GitEntity {
     });
 
     return res;
+  }
+
+  Future<void> queryAllBranches(Directory workDir) async {
+    // 并更新所有分支信息
+    var gitBranch = GitQueryAllBranch(workDir: workDir);
+    var queryEither = await gitBranch.run();
+    if (queryEither.isRight) {
+      // 更新
+      List<String> branches = (queryEither as Right).value;
+      allBranches
+        ..clear()
+        ..addAll(branches);
+    }
   }
 
   @override

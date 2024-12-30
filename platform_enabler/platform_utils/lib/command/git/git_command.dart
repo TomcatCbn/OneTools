@@ -68,8 +68,15 @@ class GitPull extends GitCMD<bool> {
 
 class GitCheckout extends GitCMD<bool> {
   final String branchName;
+  final bool hasLocalBranch;
+  final String newBranchName;
 
-  GitCheckout({required super.workDir, this.branchName = ''});
+  GitCheckout({
+    required super.workDir,
+    required this.branchName,
+    required this.hasLocalBranch,
+    this.newBranchName = '',
+  });
 
   @override
   Future<Either<E, bool>> run<E extends ToolsError>() async {
@@ -80,10 +87,9 @@ class GitCheckout extends GitCMD<bool> {
       return Either.left(CommonError.paramsInvalid() as E);
     }
     Either<ShellError, ProcessExecResult> eitherRes;
-    if (branchName.startsWith('remotes/origin/')) {
-      var branchLocal = branchName.substring('remotes/origin/'.length);
+    if (!hasLocalBranch) {
       eitherRes = await ShellUtils.execCMD(
-          [_gitCMD, _gitCMDCheckout, '-b', branchLocal, branchName], workDir);
+          [_gitCMD, _gitCMDCheckout, '-b', newBranchName, branchName], workDir);
     } else {
       eitherRes = await ShellUtils.execCMD(
           [_gitCMD, _gitCMDCheckout, branchName], workDir);
