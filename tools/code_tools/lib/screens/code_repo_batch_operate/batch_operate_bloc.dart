@@ -22,15 +22,21 @@ class BatchOperateBloc extends BaseBloc<BatchOperateEvent, BatchOperateState> {
     // TODO: debounce
     on<BatchOperateSearchKeyWordEvent>(_onSearchKeyWordEvent);
     on<BatchOperateConfirmEvent>(_onBatchOperateConfirmEvent);
+    on<BatchOperateSelectBranchEvent>(_onBatchOperateSelectBranchEvent);
   }
 
   FutureOr<void> _onBatchOperateInitEvent(
       BatchOperateInitEvent event, Emitter<BatchOperateState> emit) {
     var list = codeRepoEntities
-        .map((e) => CodeRepoState(codeRepoName: e.codeRepoName))
+        .map((e) => CodeRepoState(
+            codeRepoName: e.codeRepoName, branches: e.gitEntity.allBranches))
         .toList();
     _codeRepoList.addAll(list);
-    emit(state.copyWith(codeRepos: list));
+    // 默认用第一个仓库的branch
+    emit(state.copyWith(
+        codeRepos: list,
+        branchesForSelect: list.first.branches,
+        selectedBranch: 'develop'));
   }
 
   FutureOr<void> _onBatchOperateSelectEvent(
@@ -39,7 +45,9 @@ class BatchOperateBloc extends BaseBloc<BatchOperateEvent, BatchOperateState> {
         state.codeRepos.indexWhere((e) => e.codeRepoName == event.codeRepoName);
     var codeRepo = state.codeRepos[indexWhere];
     codeRepo.isSelect = !codeRepo.isSelect;
-    emit(state.copyWith(refreshIndex: state.refreshIndex + 1));
+    emit(state.copyWith(
+        refreshIndex: state.refreshIndex + 1,
+        branchesForSelect: codeRepo.branches));
   }
 
   FutureOr<void> _onSearchKeyWordEvent(BatchOperateSearchKeyWordEvent event,
@@ -64,6 +72,12 @@ class BatchOperateBloc extends BaseBloc<BatchOperateEvent, BatchOperateState> {
         .map((e) => e.codeRepoName)
         .toList();
     Logger.i(msg: 'BatchOperateConfirmEvent, $list');
-    navigatorKey.currentState?.pop(list);
+    navigatorKey.currentState?.pop(
+        BatchOperateRsp(codeRepos: list, branchName: state.selectedBranch));
+  }
+
+  FutureOr<void> _onBatchOperateSelectBranchEvent(
+      BatchOperateSelectBranchEvent event, Emitter<BatchOperateState> emit) {
+    emit(state.copyWith(selectedBranch: event.branchName));
   }
 }

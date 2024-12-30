@@ -9,6 +9,7 @@ import 'package:platform_utils/platform_utils.dart';
 
 import '../../domain/entities/git_action.dart';
 import '../code_repo_batch_operate/batch_operate_screen.dart';
+import '../code_repo_batch_operate/batch_operate_state.dart';
 
 class CodeRepoMgmtBloc extends BaseBloc<CodeRepoMgmtEvent, CodeRepoMgmtState> {
   static const String _tag = 'CodeRepoBloc';
@@ -45,7 +46,7 @@ class CodeRepoMgmtBloc extends BaseBloc<CodeRepoMgmtEvent, CodeRepoMgmtState> {
       CodeRepoOperationEvent event, Emitter<CodeRepoMgmtState> emit) async {
     Logger.i(msg: 'CodeRepoOperationEvent...${event.operation}', tag: _tag);
 
-    List<String>? selectedRepos = await Navigator.push(
+    BatchOperateRsp? rsp = await Navigator.push(
         event.context,
         MaterialPageRoute(
             builder: (context) => BatchOperateScreen(
@@ -53,8 +54,9 @@ class CodeRepoMgmtBloc extends BaseBloc<CodeRepoMgmtEvent, CodeRepoMgmtState> {
                   codeRepoEntities: projectAggregate.codeRepos,
                 )));
 
-    if (selectedRepos != null && selectedRepos.isNotEmpty) {
-      _doOperation(selectedRepos, event.operation);
+    if (rsp != null) {
+      await Future.delayed(const Duration(milliseconds: 500));
+      _doOperation(rsp.codeRepos, event.operation, branchName: rsp.branchName);
     }
   }
 
@@ -67,7 +69,11 @@ class CodeRepoMgmtBloc extends BaseBloc<CodeRepoMgmtEvent, CodeRepoMgmtState> {
     add(CodeRepoMgmtInitEvent());
   }
 
-  void _doOperation(List<String> selectedRepos, GitAction operation) {
+  void _doOperation(List<String> selectedRepos, GitAction operation,
+      {String? branchName}) {
+    if (selectedRepos.isEmpty) {
+      return;
+    }
     var codeRepos = projectAggregate.codeRepos;
     var toBeOperate = selectedRepos.map((e1) {
       return codeRepos.firstWhere((e2) => e2.codeRepoName == e1);
@@ -75,7 +81,7 @@ class CodeRepoMgmtBloc extends BaseBloc<CodeRepoMgmtEvent, CodeRepoMgmtState> {
     switch (operation) {
       case GitAction.checkout:
         for (var e in toBeOperate) {
-          e.execGitCMD(operation, branchName: '');
+          e.execGitCMD(operation, branchName: branchName);
         }
         break;
       case GitAction.pull:

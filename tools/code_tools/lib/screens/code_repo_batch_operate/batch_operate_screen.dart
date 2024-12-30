@@ -69,7 +69,10 @@ class BatchOperateScreen extends StatelessWidget {
               border: OutlineInputBorder(), // 设置边框样式
             ),
           ),
-          const Text('过滤'),
+          SizedBox(height: 16.h,),
+          if (operation == GitAction.checkout)
+            _buildBranchSelector(context, state),
+          SizedBox(height: 16.h,),
           const Text('过滤'),
         ],
       ),
@@ -94,6 +97,24 @@ class BatchOperateScreen extends StatelessWidget {
                 height: 16.h,
               ),
           itemCount: state.codeRepos.length),
+    );
+  }
+
+  Widget _buildBranchSelector(BuildContext context, BatchOperateState state) {
+    return DropdownMenu<String>(
+      controller: TextEditingController(text: state.selectedBranch),
+      menuHeight: 0.6.sh,
+      width: double.infinity,
+      label: const Text('Branch to select'),
+      dropdownMenuEntries: state.branchesForSelect
+          .map((e) => DropdownMenuEntry(
+                value: e,
+                label: e,
+              ))
+          .toList(),
+      onSelected: (branch) => context
+          .read<BatchOperateBloc>()
+          .add(BatchOperateSelectBranchEvent(branchName: branch ?? '')),
     );
   }
 }

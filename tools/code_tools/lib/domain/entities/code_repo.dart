@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:code_tools/domain/entities/git_action.dart';
+import 'package:code_tools/utils/ext_string.dart';
 import 'package:platform_utils/platform_command.dart';
 import 'package:platform_utils/platform_logger.dart';
 import 'package:platform_utils/platform_stream_enhance.dart';
@@ -34,13 +35,13 @@ class CodeRepoEntity {
 
   CodeRepoStatus get status => codeRepoStatus.value;
 
-  Future<void> prepare() async {
+  Future<void> prepare({bool force = false}) async {
     if (status is CodeRepoStatusUpdating) {
       return;
     }
 
     // 如果已在30s内更新，则也忽略
-    if (status is CodeRepoStatusUpdated) {
+    if (!force && status is CodeRepoStatusUpdated) {
       if ((DateTime.now()
                   .difference((status as CodeRepoStatusUpdated).updateTime))
               .inSeconds <=
@@ -82,26 +83,30 @@ class CodeRepoEntity {
   /// 根据[action]，决定了哪些参数有值
   Future<void> execGitCMD(GitAction action,
       {String? branchName, String? tagName}) async {
-    GitCMD? gitCMD;
     Directory wd = Directory(repoDir);
-    switch (action) {
-      case GitAction.checkout:
-        codeRepoStatus.sink
-            .add(CodeRepoStatusUpdating(action: 'checkout $branchName'));
-        gitCMD = GitCheckout(workDir: wd);
-        break;
-      case GitAction.pull:
-        codeRepoStatus.sink.add(CodeRepoStatusUpdating(action: 'pull'));
-        gitCMD = GitPull(workDir: wd);
-        break;
-      case GitAction.tag:
-        codeRepoStatus.sink.add(CodeRepoStatusUpdating(action: 'tag $tagName'));
-        //   gitCMD = GitTag(workDir: wd);
-        break;
-    }
+    try {
+      switch (action) {
+        case GitAction.checkout:
+          codeRepoStatus.sink
+              .add(CodeRepoStatusUpdating(action: 'checkout $branchName'));
+          await gitEntity.checkout(wd, branchName ?? '');
+          break;
+        case GitAction.pull:
+          codeRepoStatus.sink.add(CodeRepoStatusUpdating(action: 'pull'));
+          await gitEntity.pull(wd);
+          break;
+        case GitAction.tag:
+          codeRepoStatus.sink
+              .add(CodeRepoStatusUpdating(action: 'tag $tagName'));
+          await gitEntity.tag(wd, tagName ?? '');
+          break;
+      }
 
-    await gitCMD?.run();
-    codeRepoStatus.sink.add(CodeRepoStatusUpdated(updateTime: DateTime.now()));
+      codeRepoStatus.sink
+          .add(CodeRepoStatusUpdated(updateTime: DateTime.now()));
+    } catch (e) {
+      codeRepoStatus.sink.add(CodeRepoStatusFailed(reason: e.toString()));
+    }
   }
 
   @override
@@ -133,14 +138,36 @@ class GitEntity {
   List<String> allBranches = [];
 
   /// 打tag
-  Future<bool> tag(String tag) async {
-    return false;
+  Future<bool> tag(Directory workDir, String tag) async {
+    var gitCMD = GitTag(workDir: workDir, tag: tag);
+    var either = await gitCMD.run();
+    bool res = either.fold(ifLeft: (value) {
+      return false;
+    }, ifRight: (value) {
+      return true;
+    });
+    return res;
   }
 
   /// 切换分支
   /// [branch] 目标分支
-  Future<bool> checkout(String branch) async {
-    return false;
+  Future<bool> checkout(Directory workDir, String branch) async {
+    // 如果本地已存在branch，则改为本地分支，不然git指令会报错
+    allBranches.contains(branch);
+    var localBranch = branch.toLocalBranch;
+    if (allBranches.contains(localBranch)) {
+      branch = localBranch;
+    }
+
+    var gitCMD = GitCheckout(workDir: workDir, branchName: branch);
+    var either = await gitCMD.run();
+    bool res = either.fold(ifLeft: (value) {
+      return false;
+    }, ifRight: (value) {
+      this.branch = branch;
+      return true;
+    });
+    return res;
   }
 
   /// 获取最新git信息

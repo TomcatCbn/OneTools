@@ -17,6 +17,8 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$BatchOperateState {
   List<CodeRepoState> get codeRepos => throw _privateConstructorUsedError;
+  List<String> get branchesForSelect => throw _privateConstructorUsedError;
+  String? get selectedBranch => throw _privateConstructorUsedError;
   int get refreshIndex => throw _privateConstructorUsedError;
 
   /// Create a copy of BatchOperateState
@@ -32,7 +34,11 @@ abstract class $BatchOperateStateCopyWith<$Res> {
           BatchOperateState value, $Res Function(BatchOperateState) then) =
       _$BatchOperateStateCopyWithImpl<$Res, BatchOperateState>;
   @useResult
-  $Res call({List<CodeRepoState> codeRepos, int refreshIndex});
+  $Res call(
+      {List<CodeRepoState> codeRepos,
+      List<String> branchesForSelect,
+      String? selectedBranch,
+      int refreshIndex});
 }
 
 /// @nodoc
@@ -51,6 +57,8 @@ class _$BatchOperateStateCopyWithImpl<$Res, $Val extends BatchOperateState>
   @override
   $Res call({
     Object? codeRepos = null,
+    Object? branchesForSelect = null,
+    Object? selectedBranch = freezed,
     Object? refreshIndex = null,
   }) {
     return _then(_value.copyWith(
@@ -58,6 +66,14 @@ class _$BatchOperateStateCopyWithImpl<$Res, $Val extends BatchOperateState>
           ? _value.codeRepos
           : codeRepos // ignore: cast_nullable_to_non_nullable
               as List<CodeRepoState>,
+      branchesForSelect: null == branchesForSelect
+          ? _value.branchesForSelect
+          : branchesForSelect // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      selectedBranch: freezed == selectedBranch
+          ? _value.selectedBranch
+          : selectedBranch // ignore: cast_nullable_to_non_nullable
+              as String?,
       refreshIndex: null == refreshIndex
           ? _value.refreshIndex
           : refreshIndex // ignore: cast_nullable_to_non_nullable
@@ -74,7 +90,11 @@ abstract class _$$BatchOperateStateImplCopyWith<$Res>
       __$$BatchOperateStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<CodeRepoState> codeRepos, int refreshIndex});
+  $Res call(
+      {List<CodeRepoState> codeRepos,
+      List<String> branchesForSelect,
+      String? selectedBranch,
+      int refreshIndex});
 }
 
 /// @nodoc
@@ -91,6 +111,8 @@ class __$$BatchOperateStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? codeRepos = null,
+    Object? branchesForSelect = null,
+    Object? selectedBranch = freezed,
     Object? refreshIndex = null,
   }) {
     return _then(_$BatchOperateStateImpl(
@@ -98,6 +120,14 @@ class __$$BatchOperateStateImplCopyWithImpl<$Res>
           ? _value._codeRepos
           : codeRepos // ignore: cast_nullable_to_non_nullable
               as List<CodeRepoState>,
+      branchesForSelect: null == branchesForSelect
+          ? _value._branchesForSelect
+          : branchesForSelect // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      selectedBranch: freezed == selectedBranch
+          ? _value.selectedBranch
+          : selectedBranch // ignore: cast_nullable_to_non_nullable
+              as String?,
       refreshIndex: null == refreshIndex
           ? _value.refreshIndex
           : refreshIndex // ignore: cast_nullable_to_non_nullable
@@ -110,8 +140,12 @@ class __$$BatchOperateStateImplCopyWithImpl<$Res>
 
 class _$BatchOperateStateImpl implements _BatchOperateState {
   const _$BatchOperateStateImpl(
-      {final List<CodeRepoState> codeRepos = const [], this.refreshIndex = 0})
-      : _codeRepos = codeRepos;
+      {final List<CodeRepoState> codeRepos = const [],
+      final List<String> branchesForSelect = const [],
+      this.selectedBranch,
+      this.refreshIndex = 0})
+      : _codeRepos = codeRepos,
+        _branchesForSelect = branchesForSelect;
 
   final List<CodeRepoState> _codeRepos;
   @override
@@ -122,13 +156,25 @@ class _$BatchOperateStateImpl implements _BatchOperateState {
     return EqualUnmodifiableListView(_codeRepos);
   }
 
+  final List<String> _branchesForSelect;
+  @override
+  @JsonKey()
+  List<String> get branchesForSelect {
+    if (_branchesForSelect is EqualUnmodifiableListView)
+      return _branchesForSelect;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_branchesForSelect);
+  }
+
+  @override
+  final String? selectedBranch;
   @override
   @JsonKey()
   final int refreshIndex;
 
   @override
   String toString() {
-    return 'BatchOperateState(codeRepos: $codeRepos, refreshIndex: $refreshIndex)';
+    return 'BatchOperateState(codeRepos: $codeRepos, branchesForSelect: $branchesForSelect, selectedBranch: $selectedBranch, refreshIndex: $refreshIndex)';
   }
 
   @override
@@ -138,13 +184,21 @@ class _$BatchOperateStateImpl implements _BatchOperateState {
             other is _$BatchOperateStateImpl &&
             const DeepCollectionEquality()
                 .equals(other._codeRepos, _codeRepos) &&
+            const DeepCollectionEquality()
+                .equals(other._branchesForSelect, _branchesForSelect) &&
+            (identical(other.selectedBranch, selectedBranch) ||
+                other.selectedBranch == selectedBranch) &&
             (identical(other.refreshIndex, refreshIndex) ||
                 other.refreshIndex == refreshIndex));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(_codeRepos), refreshIndex);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_codeRepos),
+      const DeepCollectionEquality().hash(_branchesForSelect),
+      selectedBranch,
+      refreshIndex);
 
   /// Create a copy of BatchOperateState
   /// with the given fields replaced by the non-null parameter values.
@@ -159,10 +213,16 @@ class _$BatchOperateStateImpl implements _BatchOperateState {
 abstract class _BatchOperateState implements BatchOperateState {
   const factory _BatchOperateState(
       {final List<CodeRepoState> codeRepos,
+      final List<String> branchesForSelect,
+      final String? selectedBranch,
       final int refreshIndex}) = _$BatchOperateStateImpl;
 
   @override
   List<CodeRepoState> get codeRepos;
+  @override
+  List<String> get branchesForSelect;
+  @override
+  String? get selectedBranch;
   @override
   int get refreshIndex;
 

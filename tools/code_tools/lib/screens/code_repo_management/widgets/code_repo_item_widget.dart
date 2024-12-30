@@ -32,11 +32,9 @@ class _CodeRepoItemWidgetState extends State<CodeRepoItemWidget> {
     super.initState();
     // 监听code repo状态
     _listener = widget.codeRepoEntity.codeRepoStatus.stream.listen((data) {
-      if (mounted) {
-        setState(() {
-          isUpdating = (data is CodeRepoStatusUpdating);
-        });
-      }
+      setState(() {
+        isUpdating = (data is CodeRepoStatusUpdating);
+      });
     });
     widget.codeRepoEntity.prepare().then((onValue) {
       Logger.d(msg: '${widget.codeRepoEntity}');
@@ -88,7 +86,7 @@ class _CodeRepoItemWidgetState extends State<CodeRepoItemWidget> {
             InkWell(
               child: const Icon(Icons.refresh),
               onTap: () {
-                widget.codeRepoEntity.prepare();
+                widget.codeRepoEntity.prepare(force: true);
               },
             ),
           ],

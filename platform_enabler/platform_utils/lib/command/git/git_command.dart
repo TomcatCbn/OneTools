@@ -11,6 +11,7 @@ const String _gitCMDFetch = 'fetch';
 const String _gitCMDBranch = 'branch';
 const String _gitCMDPull = 'pull';
 const String _gitCMDCheckout = 'checkout';
+const String _gitCMDTag = 'tag';
 const String _gitCMDConfig = 'config';
 
 abstract class GitCMD<R> extends ShellCommand<R> {
@@ -66,17 +67,48 @@ class GitPull extends GitCMD<bool> {
 }
 
 class GitCheckout extends GitCMD<bool> {
-  GitCheckout({required super.workDir});
+  final String branchName;
+
+  GitCheckout({required super.workDir, this.branchName = ''});
 
   @override
   Future<Either<E, bool>> run<E extends ToolsError>() async {
-    Logger.d(msg: 'run git checkout, $workDir', tag: _tag);
-
-    var eitherRes =
-    await ShellUtils.execCMD([_gitCMD, _gitCMDCheckout], workDir);
+    Logger.d(msg: 'run git checkout, $workDir, $branchName', tag: _tag);
+    // 检查是否是远端分支
+    // remote/origin
+    if (branchName.isEmpty) {
+      return Either.left(CommonError.paramsInvalid() as E);
+    }
+    Either<ShellError, ProcessExecResult> eitherRes;
+    if (branchName.startsWith('remotes/origin/')) {
+      var branchLocal = branchName.substring('remotes/origin/'.length);
+      eitherRes = await ShellUtils.execCMD(
+          [_gitCMD, _gitCMDCheckout, '-b', branchLocal, branchName], workDir);
+    } else {
+      eitherRes = await ShellUtils.execCMD(
+          [_gitCMD, _gitCMDCheckout, branchName], workDir);
+    }
 
     return eitherRes.fold(
         ifLeft: (l) => Left(l as E), ifRight: (r) => Right(r.isSuccess));
+  }
+}
+
+class GitTag extends GitCMD<String> {
+  final String tag;
+
+  GitTag({required super.workDir, required this.tag});
+
+  @override
+  Future<Either<E, String>> run<E extends ToolsError>() async {
+    if (tag.isEmpty) {
+      return Either.left(CommonError.paramsInvalid() as E);
+    }
+    var either = await ShellUtils.execCMD([_gitCMD, _gitCMDTag, tag], workDir);
+
+    return either.fold(
+        ifLeft: (l) => Left(l as E),
+        ifRight: (r) => Right((r.stdout ?? 'unknown').toString().trim()));
   }
 }
 
