@@ -23,4 +23,7 @@ abstract class CodeRepoDao {
 
   @delete
   Future<void> deleteCodeRepo(CodeRepoPo codeRepo);
+
+  @Query('DELETE FROM code_repo WHERE code_repo_name = :codeRepoName')
+  Future<void> deleteCodeRepoBy(String codeRepoName);
 }

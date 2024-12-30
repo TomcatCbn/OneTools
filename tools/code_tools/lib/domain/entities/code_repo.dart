@@ -19,7 +19,8 @@ class CodeRepoEntity {
   /// 自身目录
   final String repoDir;
 
-  String get codeRepoName => gitEntity.repoDirName;
+  /// 唯一标识
+  final String codeRepoName;
 
   BehaviorSubject<CodeRepoStatus> codeRepoStatus =
       BehaviorSubject.seeded(CodeRepoStatusIdle());
@@ -28,6 +29,7 @@ class CodeRepoEntity {
     required this.qualityEntity,
     required this.gitEntity,
     required this.workDir,
+    required this.codeRepoName,
   }) : repoDir = '$workDir/${gitEntity.repoDirName}';
 
   CodeRepoStatus get status => codeRepoStatus.value;
@@ -35,6 +37,16 @@ class CodeRepoEntity {
   Future<void> prepare() async {
     if (status is CodeRepoStatusUpdating) {
       return;
+    }
+
+    // 如果已在30s内更新，则也忽略
+    if (status is CodeRepoStatusUpdated) {
+      if ((DateTime.now()
+                  .difference((status as CodeRepoStatusUpdated).updateTime))
+              .inSeconds <=
+          30) {
+        return;
+      }
     }
 
     try {
@@ -90,7 +102,7 @@ class GitEntity {
   /// 当前分支
   String branch = '';
 
-  GitEntity({required this.gitRepo}) : repoDirName = gitRepo.extractName;
+  GitEntity({required this.gitRepo, required this.repoDirName});
 
   List<String> allBranches = [];
 

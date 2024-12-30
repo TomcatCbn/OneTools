@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:code_tools/domain/entities/project.dart';
+import 'package:code_tools/utils/ext_string.dart';
 
 import '../entities/code_repo.dart';
 
@@ -22,10 +23,14 @@ class ProjectFactoryImpl implements ProjectFactory {
       workDir: workDir,
     );
     for (final codeRepoT in codeReposT) {
+      var codeRepoUrl = codeRepoT['repoUrl'] as String;
+      var codeRepoName = codeRepoUrl.extractName;
       var codeRepoEntity = CodeRepoEntity(
           qualityEntity: QualityEntity.empty,
-          gitEntity: GitEntity(gitRepo: codeRepoT['repoUrl']),
-          workDir: projectAggregate.projectDir);
+          gitEntity: GitEntity(
+              gitRepo: codeRepoUrl, repoDirName: codeRepoName),
+          workDir: projectAggregate.projectDir,
+          codeRepoName: codeRepoName);
       projectAggregate.addCodeRepo(codeRepoEntity);
     }
 

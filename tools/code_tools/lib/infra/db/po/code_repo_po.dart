@@ -12,6 +12,8 @@ import 'project_po.dart';
 ])
 class CodeRepoPo {
   @primaryKey
+  @ColumnInfo(name: 'code_repo_name')
+  final String codeRepoName;
   @ColumnInfo(name: 'repo_url')
   final String repoUrl;
 
@@ -21,6 +23,7 @@ class CodeRepoPo {
   final String project;
 
   CodeRepoPo({
+    required this.codeRepoName,
     required this.repoUrl,
     required this.workDir,
     required this.project,
@@ -29,7 +32,8 @@ class CodeRepoPo {
   CodeRepoEntity toDo() {
     return CodeRepoEntity(
         qualityEntity: QualityEntity.empty,
-        gitEntity: GitEntity(gitRepo: repoUrl),
-        workDir: workDir);
+        gitEntity: GitEntity(gitRepo: repoUrl, repoDirName: codeRepoName),
+        workDir: workDir,
+        codeRepoName: codeRepoName);
   }
 }

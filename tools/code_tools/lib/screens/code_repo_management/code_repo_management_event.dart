@@ -9,3 +9,10 @@ class CodeRepoOperationEvent extends CodeRepoMgmtEvent {
 
   CodeRepoOperationEvent({required this.operation});
 }
+
+/// 删除仓库
+class CodeRepoDeleteEvent extends CodeRepoMgmtEvent {
+  final String codeRepoName;
+
+  CodeRepoDeleteEvent({required this.codeRepoName});
+}

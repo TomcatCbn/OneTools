@@ -45,15 +45,27 @@ class _BodyWidget extends StatelessWidget {
       child: BlocConsumer<CodeRepoMgmtBloc, CodeRepoMgmtState>(
           builder: (context, state) {
             final List<CodeRepoOperationItemState> items = [
-              CodeRepoOperationItemState(text: 'Checkout', onTap: () {
-                context.read<CodeRepoMgmtBloc>().add(CodeRepoOperationEvent(operation: 'Checkout'));
-              }),
-              CodeRepoOperationItemState(text: 'Pull', onTap: () {
-                context.read<CodeRepoMgmtBloc>().add(CodeRepoOperationEvent(operation: 'Pull'));
-              }),
-              CodeRepoOperationItemState(text: 'TAG', onTap: () {
-                context.read<CodeRepoMgmtBloc>().add(CodeRepoOperationEvent(operation: 'TAG'));
-              }),
+              CodeRepoOperationItemState(
+                  text: 'Checkout',
+                  onTap: () {
+                    context
+                        .read<CodeRepoMgmtBloc>()
+                        .add(CodeRepoOperationEvent(operation: 'Checkout'));
+                  }),
+              CodeRepoOperationItemState(
+                  text: 'Pull',
+                  onTap: () {
+                    context
+                        .read<CodeRepoMgmtBloc>()
+                        .add(CodeRepoOperationEvent(operation: 'Pull'));
+                  }),
+              CodeRepoOperationItemState(
+                  text: 'TAG',
+                  onTap: () {
+                    context
+                        .read<CodeRepoMgmtBloc>()
+                        .add(CodeRepoOperationEvent(operation: 'TAG'));
+                  }),
             ];
 
             return Column(
@@ -79,6 +91,10 @@ class _BodyWidget extends StatelessWidget {
             var codeRepo = state.codeRepoEntities[index];
             return CodeRepoItemWidget(
               codeRepo,
+              deleteCallback: () {
+                context.read<CodeRepoMgmtBloc>().add(
+                    CodeRepoDeleteEvent(codeRepoName: codeRepo.codeRepoName));
+              },
             );
           },
           separatorBuilder: (context, index) {

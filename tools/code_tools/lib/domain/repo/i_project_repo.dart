@@ -15,4 +15,6 @@ abstract class ProjectRepo {
   Future<List<ProjectAggregate>> loadAllProject();
 
   Future<bool> isProjectExist(String projectName);
+
+  Future<bool> removeCodeRepo(String codeRepoName);
 }

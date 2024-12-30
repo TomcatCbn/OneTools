@@ -47,4 +47,9 @@ class ProjectRepoImpl implements ProjectRepo {
   Future<bool> isProjectExist(String projectName) {
     return _localDataSource.isProjectExist(projectName);
   }
+
+  @override
+  Future<bool> removeCodeRepo(String codeRepoName) {
+    return _localDataSource.removeCodeRepo(codeRepoName);
+  }
 }

@@ -36,4 +36,12 @@ class ProjectUseCase {
       return repo.addProject(project);
     }
   }
+
+  Future<bool> deleteCodeRepo(
+      ProjectAggregate project, String codeRepoName) async {
+    project.removeCodeRepo(codeRepoName);
+    await repo.removeCodeRepo(codeRepoName);
+
+    return true;
+  }
 }

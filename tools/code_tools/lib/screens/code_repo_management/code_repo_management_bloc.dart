@@ -18,6 +18,7 @@ class CodeRepoMgmtBloc extends BaseBloc<CodeRepoMgmtEvent, CodeRepoMgmtState> {
       : super(const CodeRepoMgmtState()) {
     on<CodeRepoMgmtInitEvent>(_onCodeRepoInitEvent);
     on<CodeRepoOperationEvent>(_onCodeRepoOperationEvent);
+    on<CodeRepoDeleteEvent>(_onCodeRepoDeleteEvent);
   }
 
   FutureOr<void> _onCodeRepoInitEvent(
@@ -42,5 +43,14 @@ class CodeRepoMgmtBloc extends BaseBloc<CodeRepoMgmtEvent, CodeRepoMgmtState> {
     Logger.i(msg: 'CodeRepoOperationEvent...${event.operation}', tag: _tag);
 
     toastHelper.showToast(msg: event.operation);
+  }
+
+  FutureOr<void> _onCodeRepoDeleteEvent(
+      CodeRepoDeleteEvent event, Emitter<CodeRepoMgmtState> emit) async {
+    Logger.i(msg: 'CodeRepoDeleteEvent...${event.codeRepoName}', tag: _tag);
+
+    await projectUseCase.deleteCodeRepo(projectAggregate, event.codeRepoName);
+
+    add(CodeRepoMgmtInitEvent());
   }
 }

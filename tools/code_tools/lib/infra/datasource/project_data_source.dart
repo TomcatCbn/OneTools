@@ -22,6 +22,7 @@ class ProjectLocalDataSource {
         repoUrl: e.gitEntity.gitRepo,
         project: project.projectName,
         workDir: e.workDir,
+        codeRepoName: e.codeRepoName,
       );
     }).toList());
 
@@ -64,9 +65,11 @@ class ProjectLocalDataSource {
         workDir: project.workDir));
     project.codeRepos.map((e) {
       codeRepoDao.deleteCodeRepo(CodeRepoPo(
-          repoUrl: e.gitEntity.gitRepo,
-          project: project.projectName,
-          workDir: e.workDir));
+        repoUrl: e.gitEntity.gitRepo,
+        project: project.projectName,
+        workDir: e.workDir,
+        codeRepoName: e.codeRepoName,
+      ));
     });
 
     return true;
@@ -82,14 +85,18 @@ class ProjectLocalDataSource {
       bool exist = codeRepoPo != null;
       if (exist) {
         await codeRepoDao.updateCodeRepo(CodeRepoPo(
-            repoUrl: e.gitEntity.gitRepo,
-            project: project.projectName,
-            workDir: e.workDir));
+          repoUrl: e.gitEntity.gitRepo,
+          project: project.projectName,
+          workDir: e.workDir,
+          codeRepoName: e.codeRepoName,
+        ));
       } else {
         await codeRepoDao.insertCodeRepo(CodeRepoPo(
-            repoUrl: e.gitEntity.gitRepo,
-            project: project.projectName,
-            workDir: e.workDir));
+          repoUrl: e.gitEntity.gitRepo,
+          project: project.projectName,
+          workDir: e.workDir,
+          codeRepoName: e.codeRepoName,
+        ));
       }
     });
     await Future.wait(map);
@@ -99,5 +106,10 @@ class ProjectLocalDataSource {
   Future<bool> isProjectExist(String projectName) async {
     var projectPo = await projectDao.findProjectBy(projectName);
     return projectPo != null;
+  }
+
+  Future<bool> removeCodeRepo(String codeRepoName) async {
+    await codeRepoDao.deleteCodeRepoBy(codeRepoName);
+    return true;
   }
 }
