@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:platform_utils/platform_screenutils.dart';
 import 'package:platform_utils/platform_utils.dart';
 
+import '../../domain/entities/git_action.dart';
 import 'code_repo_management_event.dart';
 import 'code_repo_management_state.dart';
 import 'widgets/code_repo_operation_widget.dart';
@@ -48,23 +49,20 @@ class _BodyWidget extends StatelessWidget {
               CodeRepoOperationItemState(
                   text: 'Checkout',
                   onTap: () {
-                    context
-                        .read<CodeRepoMgmtBloc>()
-                        .add(CodeRepoOperationEvent(operation: 'Checkout'));
+                    context.read<CodeRepoMgmtBloc>().add(CodeRepoOperationEvent(
+                        context: context, operation: GitAction.checkout));
                   }),
               CodeRepoOperationItemState(
                   text: 'Pull',
                   onTap: () {
-                    context
-                        .read<CodeRepoMgmtBloc>()
-                        .add(CodeRepoOperationEvent(operation: 'Pull'));
+                    context.read<CodeRepoMgmtBloc>().add(CodeRepoOperationEvent(
+                        context: context, operation: GitAction.pull));
                   }),
               CodeRepoOperationItemState(
                   text: 'TAG',
                   onTap: () {
-                    context
-                        .read<CodeRepoMgmtBloc>()
-                        .add(CodeRepoOperationEvent(operation: 'TAG'));
+                    context.read<CodeRepoMgmtBloc>().add(CodeRepoOperationEvent(
+                        context: context, operation: GitAction.tag));
                   }),
             ];
 

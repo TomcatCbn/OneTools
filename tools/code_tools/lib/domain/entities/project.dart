@@ -49,10 +49,10 @@ class ProjectAggregate {
     }
 
     // gitlab dns无法解析，需要设置环境变量
-    // await GitProxy(proxy: 'http://127.0.0.1:7890', workDir: directory).run();
+    await GitProxy(proxy: 'http://127.0.0.1:7890', workDir: directory).run();
     // cea
-    await GitProxy(proxy: 'http://10.231.16.102:3192', workDir: directory)
-        .run();
+    // await GitProxy(proxy: 'http://10.231.16.102:3192', workDir: directory)
+    //     .run();
 
     Logger.i(msg: 'project config finish...');
   }

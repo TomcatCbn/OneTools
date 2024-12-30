@@ -13,6 +13,7 @@ class OneToolsApp extends StatelessWidget {
     var homeWidget = const MyHomePage(title: 'Developer Tools Home Page');
 
     var materialApp = MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Developer Tools',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

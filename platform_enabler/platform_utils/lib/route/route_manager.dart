@@ -19,3 +19,6 @@ class RouteManager {
     allRoutes.addAll(routes);
   }
 }
+
+// global context
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();

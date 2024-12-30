@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:code_tools/utils/ext_string.dart';
-import 'package:platform_utils/platform_stream_enhance.dart';
+import 'package:code_tools/domain/entities/git_action.dart';
 import 'package:platform_utils/platform_command.dart';
 import 'package:platform_utils/platform_logger.dart';
+import 'package:platform_utils/platform_stream_enhance.dart';
 
 /// 代表一个仓库实例
 class CodeRepoEntity {
@@ -76,6 +76,32 @@ class CodeRepoEntity {
       Logger.e(msg: 'prepare ${gitEntity.repoDirName} failed, $e');
       codeRepoStatus.sink.add(CodeRepoStatusFailed(reason: '$e'));
     }
+  }
+
+  /// [action]
+  /// 根据[action]，决定了哪些参数有值
+  Future<void> execGitCMD(GitAction action,
+      {String? branchName, String? tagName}) async {
+    GitCMD? gitCMD;
+    Directory wd = Directory(repoDir);
+    switch (action) {
+      case GitAction.checkout:
+        codeRepoStatus.sink
+            .add(CodeRepoStatusUpdating(action: 'checkout $branchName'));
+        gitCMD = GitCheckout(workDir: wd);
+        break;
+      case GitAction.pull:
+        codeRepoStatus.sink.add(CodeRepoStatusUpdating(action: 'pull'));
+        gitCMD = GitPull(workDir: wd);
+        break;
+      case GitAction.tag:
+        codeRepoStatus.sink.add(CodeRepoStatusUpdating(action: 'tag $tagName'));
+        //   gitCMD = GitTag(workDir: wd);
+        break;
+    }
+
+    await gitCMD?.run();
+    codeRepoStatus.sink.add(CodeRepoStatusUpdated(updateTime: DateTime.now()));
   }
 
   @override

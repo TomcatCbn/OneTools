@@ -10,6 +10,7 @@ const String _gitCMDClone = 'clone';
 const String _gitCMDFetch = 'fetch';
 const String _gitCMDBranch = 'branch';
 const String _gitCMDPull = 'pull';
+const String _gitCMDCheckout = 'checkout';
 const String _gitCMDConfig = 'config';
 
 abstract class GitCMD<R> extends ShellCommand<R> {
@@ -58,6 +59,21 @@ class GitPull extends GitCMD<bool> {
 
     var eitherRes =
         await ShellUtils.execCMD([_gitCMD, _gitCMDPull, '--rebase'], workDir);
+
+    return eitherRes.fold(
+        ifLeft: (l) => Left(l as E), ifRight: (r) => Right(r.isSuccess));
+  }
+}
+
+class GitCheckout extends GitCMD<bool> {
+  GitCheckout({required super.workDir});
+
+  @override
+  Future<Either<E, bool>> run<E extends ToolsError>() async {
+    Logger.d(msg: 'run git checkout, $workDir', tag: _tag);
+
+    var eitherRes =
+    await ShellUtils.execCMD([_gitCMD, _gitCMDCheckout], workDir);
 
     return eitherRes.fold(
         ifLeft: (l) => Left(l as E), ifRight: (r) => Right(r.isSuccess));

@@ -47,6 +47,3 @@ enum Lifecycle {
   onPause,
   onDestroy,
 }
-
-// global context
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();

@@ -4,8 +4,11 @@ import 'package:code_tools/domain/entities/project.dart';
 import 'package:code_tools/domain/usecases/project_usecase.dart';
 import 'package:code_tools/screens/code_repo_management/code_repo_management_event.dart';
 import 'package:code_tools/screens/code_repo_management/code_repo_management_state.dart';
-import 'package:platform_plugins/platform_plugins.dart';
+import 'package:flutter/material.dart';
 import 'package:platform_utils/platform_utils.dart';
+
+import '../../domain/entities/git_action.dart';
+import '../code_repo_batch_operate/batch_operate_screen.dart';
 
 class CodeRepoMgmtBloc extends BaseBloc<CodeRepoMgmtEvent, CodeRepoMgmtState> {
   static const String _tag = 'CodeRepoBloc';
@@ -39,10 +42,20 @@ class CodeRepoMgmtBloc extends BaseBloc<CodeRepoMgmtEvent, CodeRepoMgmtState> {
   }
 
   FutureOr<void> _onCodeRepoOperationEvent(
-      CodeRepoOperationEvent event, Emitter<CodeRepoMgmtState> emit) {
+      CodeRepoOperationEvent event, Emitter<CodeRepoMgmtState> emit) async {
     Logger.i(msg: 'CodeRepoOperationEvent...${event.operation}', tag: _tag);
 
-    toastHelper.showToast(msg: event.operation);
+    List<String>? selectedRepos = await Navigator.push(
+        event.context,
+        MaterialPageRoute(
+            builder: (context) => BatchOperateScreen(
+                  operation: event.operation,
+                  codeRepoEntities: projectAggregate.codeRepos,
+                )));
+
+    if (selectedRepos != null && selectedRepos.isNotEmpty) {
+      _doOperation(selectedRepos, event.operation);
+    }
   }
 
   FutureOr<void> _onCodeRepoDeleteEvent(
@@ -52,5 +65,29 @@ class CodeRepoMgmtBloc extends BaseBloc<CodeRepoMgmtEvent, CodeRepoMgmtState> {
     await projectUseCase.deleteCodeRepo(projectAggregate, event.codeRepoName);
 
     add(CodeRepoMgmtInitEvent());
+  }
+
+  void _doOperation(List<String> selectedRepos, GitAction operation) {
+    var codeRepos = projectAggregate.codeRepos;
+    var toBeOperate = selectedRepos.map((e1) {
+      return codeRepos.firstWhere((e2) => e2.codeRepoName == e1);
+    }).toList();
+    switch (operation) {
+      case GitAction.checkout:
+        for (var e in toBeOperate) {
+          e.execGitCMD(operation, branchName: '');
+        }
+        break;
+      case GitAction.pull:
+        for (var e in toBeOperate) {
+          e.execGitCMD(operation);
+        }
+        break;
+      case GitAction.tag:
+        for (var e in toBeOperate) {
+          e.execGitCMD(operation);
+        }
+        break;
+    }
   }
 }

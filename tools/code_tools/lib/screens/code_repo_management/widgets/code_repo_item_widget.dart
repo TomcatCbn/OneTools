@@ -32,9 +32,11 @@ class _CodeRepoItemWidgetState extends State<CodeRepoItemWidget> {
     super.initState();
     // 监听code repo状态
     _listener = widget.codeRepoEntity.codeRepoStatus.stream.listen((data) {
-      setState(() {
-        isUpdating = (data is CodeRepoStatusUpdating);
-      });
+      if (mounted) {
+        setState(() {
+          isUpdating = (data is CodeRepoStatusUpdating);
+        });
+      }
     });
     widget.codeRepoEntity.prepare().then((onValue) {
       Logger.d(msg: '${widget.codeRepoEntity}');
