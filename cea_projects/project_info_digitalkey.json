@@ -1,0 +1,13 @@
+{
+  "projectName": "cea-digitalkey",
+  "projectDesc": "OneBackend Digital key Server",
+  "codeRepos": [
+    {
+      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/digital-key/xp-smart-digital-key.git"
+    },
+    {
+      "repoUrl":
+          "https://gitlab.intranet.vwg-cea.cn/iix-cloud/digital-key/xp-vk-admin.git"
+    }
+  ]
+}

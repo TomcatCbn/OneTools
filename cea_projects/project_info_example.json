@@ -1,0 +1,18 @@
+{
+  "projectName": "example",
+  "projectDesc": "Example",
+  "codeRepos": [
+    {
+      "repoUrl": "https://github.com/hackware1993/Flutter_ConstraintLayout.git"
+    },
+    {
+      "repoUrl": "https://github.com/isar/hive.git"
+    },
+    {
+      "repoUrl": "https://github.com/rrousselGit/freezed.git"
+    },
+    {
+      "repoUrl": "https://github.com/pinchbv/floor.git"
+    }
+  ]
+}

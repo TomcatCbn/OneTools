@@ -1,0 +1,20 @@
+{
+  "projectName": "cea-onesdk-ios",
+  "projectDesc": "CEA OneSDK iOS",
+  "codeRepos": [
+    {
+      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/debugtools.git"
+    }, {
+      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/vw-vehicle-ios-demo.git"
+    },
+    {
+      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/vw-vehicle-ios-sdk.git"
+    },
+    {
+      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/xpbledataprocessor.git"
+    },
+    {
+      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/xpvehicleext.git"
+    }
+  ]
+}
