@@ -79,19 +79,19 @@ class _BodyWidget extends StatelessWidget {
                         context: context, operation: CodeRepoOperation.branch));
                   }),
               CodeRepoOperationItemState(
-                  text: 'PublishTodo',
+                  text: 'Publish(Todo)',
                   onTap: () {
                     context.read<CodeRepoMgmtBloc>().add(CodeRepoOperationEvent(
                         context: context, operation: CodeRepoOperation.publish));
                   }),
               CodeRepoOperationItemState(
-                  text: 'Code统计Todo',
+                  text: 'Code统计(Todo)',
                   onTap: () {
                     context.read<CodeRepoMgmtBloc>().add(CodeRepoOperationEvent(
                         context: context, operation: CodeRepoOperation.codeStatistic));
                   }),
               CodeRepoOperationItemState(
-                  text: '依赖关系Todo',
+                  text: '依赖关系(Todo)',
                   onTap: () {
                     context.read<CodeRepoMgmtBloc>().add(CodeRepoOperationEvent(
                         context: context, operation: CodeRepoOperation.repoDependencies));
