@@ -7,7 +7,7 @@ class BatchOperateState with _$BatchOperateState {
   const factory BatchOperateState({
     @Default([]) List<CodeRepoState> codeRepos,
     @Default([]) List<String> branchesForSelect,
-    String? selectedBranch,
+    String? targetName,
     @Default(0) int refreshIndex,
   }) = _BatchOperateState;
 }
@@ -31,7 +31,7 @@ class CodeRepoState {
 
 class BatchOperateRsp {
   final List<String> codeRepos;
-  String? branchName;
+  String? targetName;
 
-  BatchOperateRsp({required this.codeRepos, this.branchName});
+  BatchOperateRsp({required this.codeRepos, this.targetName});
 }

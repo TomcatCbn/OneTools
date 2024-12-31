@@ -56,7 +56,8 @@ class _CodeRepoItemWidgetState extends State<CodeRepoItemWidget> {
             Column(
               children: [
                 Text(
-                    'Repo Name: ${widget.codeRepoEntity.gitEntity.repoDirName}'),
+                    'Repo Name: ${widget.codeRepoEntity.gitEntity.repoDirName}',
+                    style: TextStyle(fontSize: 12.0.sp)),
                 Text('Repo dir: ${widget.codeRepoEntity.repoDir}'),
                 Text('Branch: ${widget.codeRepoEntity.gitEntity.branch}'),
               ],

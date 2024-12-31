@@ -12,6 +12,7 @@ const String _gitCMDBranch = 'branch';
 const String _gitCMDPull = 'pull';
 const String _gitCMDCheckout = 'checkout';
 const String _gitCMDTag = 'tag';
+const String _gitCMDPush = 'push';
 const String _gitCMDConfig = 'config';
 
 abstract class GitCMD<R> extends ShellCommand<R> {
@@ -111,6 +112,35 @@ class GitTag extends GitCMD<String> {
       return Either.left(CommonError.paramsInvalid() as E);
     }
     var either = await ShellUtils.execCMD([_gitCMD, _gitCMDTag, tag], workDir);
+    if (either.isRight) {
+      either =
+          await ShellUtils.execCMD([_gitCMD, _gitCMDPush, '--tag'], workDir);
+    }
+
+    return either.fold(
+        ifLeft: (l) => Left(l as E),
+        ifRight: (r) => Right((r.stdout ?? 'unknown').toString().trim()));
+  }
+}
+
+class GitBranch extends GitCMD<String> {
+  final String branchName;
+
+  GitBranch({required super.workDir, required this.branchName});
+
+  @override
+  Future<Either<E, String>> run<E extends ToolsError>() async {
+    if (branchName.isEmpty) {
+      return Either.left(CommonError.paramsInvalid() as E);
+    }
+    var either =
+        await ShellUtils.execCMD([_gitCMD, _gitCMDBranch, branchName], workDir);
+    // 推送到远端，关联本地分支
+    if (either.isRight) {
+      either = await ShellUtils.execCMD(
+          [_gitCMD, _gitCMDPush, '--set-upstream', 'origin', branchName],
+          workDir);
+    }
 
     return either.fold(
         ifLeft: (l) => Left(l as E),

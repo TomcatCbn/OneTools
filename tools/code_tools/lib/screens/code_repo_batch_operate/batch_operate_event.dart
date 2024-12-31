@@ -8,6 +8,18 @@ class BatchOperateSelectBranchEvent extends BatchOperateEvent {
   BatchOperateSelectBranchEvent({required this.branchName});
 }
 
+class BatchOperateCreateBranchEvent extends BatchOperateEvent {
+  final String branchName;
+
+  BatchOperateCreateBranchEvent({required this.branchName});
+}
+
+class BatchOperateCreateTagEvent extends BatchOperateEvent {
+  final String tagName;
+
+  BatchOperateCreateTagEvent({required this.tagName});
+}
+
 class BatchOperateConfirmEvent extends BatchOperateEvent {}
 
 class BatchOperateSearchKeyWordEvent extends BatchOperateEvent {

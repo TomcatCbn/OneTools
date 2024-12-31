@@ -10,7 +10,10 @@ import 'batch_operate_state.dart';
 class BatchOperateBloc extends BaseBloc<BatchOperateEvent, BatchOperateState> {
   final List<CodeRepoEntity> codeRepoEntities;
 
-  final TextEditingController controller = TextEditingController();
+  // 用于筛选框
+  final TextEditingController filtercontroller = TextEditingController();
+  // 用于输入目标名称框
+  final TextEditingController targetNameController = TextEditingController();
 
   // backup
   final List<CodeRepoState> _codeRepoList = [];
@@ -23,6 +26,8 @@ class BatchOperateBloc extends BaseBloc<BatchOperateEvent, BatchOperateState> {
     on<BatchOperateSearchKeyWordEvent>(_onSearchKeyWordEvent);
     on<BatchOperateConfirmEvent>(_onBatchOperateConfirmEvent);
     on<BatchOperateSelectBranchEvent>(_onBatchOperateSelectBranchEvent);
+    on<BatchOperateCreateBranchEvent>(_onBatchOperateCreateBranchEvent);
+    on<BatchOperateCreateTagEvent>(_onBatchOperateCreateTagEvent);
   }
 
   FutureOr<void> _onBatchOperateInitEvent(
@@ -36,7 +41,7 @@ class BatchOperateBloc extends BaseBloc<BatchOperateEvent, BatchOperateState> {
     emit(state.copyWith(
         codeRepos: list,
         branchesForSelect: list.first.branches,
-        selectedBranch: 'develop'));
+        targetName: ''));
   }
 
   FutureOr<void> _onBatchOperateSelectEvent(
@@ -73,11 +78,21 @@ class BatchOperateBloc extends BaseBloc<BatchOperateEvent, BatchOperateState> {
         .toList();
     Logger.i(msg: 'BatchOperateConfirmEvent, $list');
     navigatorKey.currentState?.pop(
-        BatchOperateRsp(codeRepos: list, branchName: state.selectedBranch));
+        BatchOperateRsp(codeRepos: list, targetName: state.targetName));
   }
 
   FutureOr<void> _onBatchOperateSelectBranchEvent(
       BatchOperateSelectBranchEvent event, Emitter<BatchOperateState> emit) {
-    emit(state.copyWith(selectedBranch: event.branchName));
+    emit(state.copyWith(targetName: event.branchName));
+  }
+
+  FutureOr<void> _onBatchOperateCreateBranchEvent(
+      BatchOperateCreateBranchEvent event, Emitter<BatchOperateState> emit) {
+    emit(state.copyWith(targetName: event.branchName));
+  }
+
+  FutureOr<void> _onBatchOperateCreateTagEvent(
+      BatchOperateCreateTagEvent event, Emitter<BatchOperateState> emit) {
+    emit(state.copyWith(targetName: event.tagName));
   }
 }

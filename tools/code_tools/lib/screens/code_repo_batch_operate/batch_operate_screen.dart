@@ -10,7 +10,7 @@ import '../../domain/entities/git_action.dart';
 import 'batch_operate_bloc.dart';
 
 class BatchOperateScreen extends StatelessWidget {
-  final GitAction operation;
+  final CodeRepoOperation operation;
   final List<CodeRepoEntity> codeRepoEntities;
 
   const BatchOperateScreen(
@@ -59,7 +59,7 @@ class BatchOperateScreen extends StatelessWidget {
       child: Column(
         children: [
           TextFormField(
-            controller: context.read<BatchOperateBloc>().controller,
+            controller: context.read<BatchOperateBloc>().filtercontroller,
             onChanged: (t) => context
                 .read<BatchOperateBloc>()
                 .add(BatchOperateSearchKeyWordEvent(keyWord: t)),
@@ -69,11 +69,16 @@ class BatchOperateScreen extends StatelessWidget {
               border: OutlineInputBorder(), // 设置边框样式
             ),
           ),
-          SizedBox(height: 16.h,),
-          if (operation == GitAction.checkout)
+          SizedBox(
+            height: 16.h,
+          ),
+          if (operation == CodeRepoOperation.checkout)
             _buildBranchSelector(context, state),
-          SizedBox(height: 16.h,),
-          const Text('过滤'),
+          if (operation == CodeRepoOperation.branch) _buildBranchName(context, state),
+          if (operation == CodeRepoOperation.tag) _buildTagName(context, state),
+          SizedBox(
+            height: 16.h,
+          ),
         ],
       ),
     );
@@ -102,7 +107,7 @@ class BatchOperateScreen extends StatelessWidget {
 
   Widget _buildBranchSelector(BuildContext context, BatchOperateState state) {
     return DropdownMenu<String>(
-      controller: TextEditingController(text: state.selectedBranch),
+      controller: TextEditingController(text: state.targetName),
       menuHeight: 0.6.sh,
       width: double.infinity,
       label: const Text('Branch to select'),
@@ -115,6 +120,34 @@ class BatchOperateScreen extends StatelessWidget {
       onSelected: (branch) => context
           .read<BatchOperateBloc>()
           .add(BatchOperateSelectBranchEvent(branchName: branch ?? '')),
+    );
+  }
+
+  Widget _buildBranchName(BuildContext context, BatchOperateState state) {
+    return TextFormField(
+      controller: context.read<BatchOperateBloc>().targetNameController,
+      onChanged: (t) => context
+          .read<BatchOperateBloc>()
+          .add(BatchOperateCreateBranchEvent(branchName: t)),
+      decoration: const InputDecoration(
+        labelText: 'branch名字', // 标签
+        hintText: 'branch名字', // 提示文本
+        border: OutlineInputBorder(), // 设置边框样式
+      ),
+    );
+  }
+
+  Widget _buildTagName(BuildContext context, BatchOperateState state) {
+    return TextFormField(
+      controller: context.read<BatchOperateBloc>().targetNameController,
+      onChanged: (t) => context
+          .read<BatchOperateBloc>()
+          .add(BatchOperateCreateTagEvent(tagName: t)),
+      decoration: const InputDecoration(
+        labelText: 'tag名字', // 标签
+        hintText: 'tag名字', // 提示文本
+        border: OutlineInputBorder(), // 设置边框样式
+      ),
     );
   }
 }

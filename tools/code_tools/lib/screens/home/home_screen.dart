@@ -62,7 +62,7 @@ class _BodyWidget extends StatelessWidget {
                 padding: EdgeInsets.symmetric(vertical: 16.h),
                 child: Center(
                   child: Column(children: [
-                    Text(project.projectName),
+                    Text(project.projectName,style: TextStyle(fontSize: 12.0.sp),),
                     Text('Desc: ${project.projectDesc}'),
                     Text('ProjectDir: ${project.projectDir}'),
                     Text('CodeRepo count: ${project.codeRepoCount}')

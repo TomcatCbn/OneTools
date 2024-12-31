@@ -56,7 +56,7 @@ class CodeRepoMgmtBloc extends BaseBloc<CodeRepoMgmtEvent, CodeRepoMgmtState> {
 
     if (rsp != null) {
       await Future.delayed(const Duration(milliseconds: 500));
-      _doOperation(rsp.codeRepos, event.operation, branchName: rsp.branchName);
+      _doOperation(rsp.codeRepos, event.operation, targetName: rsp.targetName);
     }
   }
 
@@ -69,8 +69,8 @@ class CodeRepoMgmtBloc extends BaseBloc<CodeRepoMgmtEvent, CodeRepoMgmtState> {
     add(CodeRepoMgmtInitEvent());
   }
 
-  void _doOperation(List<String> selectedRepos, GitAction operation,
-      {String? branchName}) {
+  void _doOperation(List<String> selectedRepos, CodeRepoOperation operation,
+      {String? targetName}) {
     if (selectedRepos.isEmpty) {
       return;
     }
@@ -79,21 +79,32 @@ class CodeRepoMgmtBloc extends BaseBloc<CodeRepoMgmtEvent, CodeRepoMgmtState> {
       return codeRepos.firstWhere((e2) => e2.codeRepoName == e1);
     }).toList();
     switch (operation) {
-      case GitAction.checkout:
+      case CodeRepoOperation.checkout:
         for (var e in toBeOperate) {
-          e.execGitCMD(operation, branchName: branchName);
+          e.execGitCMD(operation, branchName: targetName);
         }
         break;
-      case GitAction.pull:
-        for (var e in toBeOperate) {
-          e.execGitCMD(operation);
-        }
-        break;
-      case GitAction.tag:
+      case CodeRepoOperation.pull:
         for (var e in toBeOperate) {
           e.execGitCMD(operation);
         }
         break;
+      case CodeRepoOperation.tag:
+        for (var e in toBeOperate) {
+          e.execGitCMD(operation, tagName: targetName);
+        }
+        break;
+      case CodeRepoOperation.branch:
+        for (var e in toBeOperate) {
+          e.execGitCMD(operation, branchName: targetName);
+        }
+        break;
+      case CodeRepoOperation.publish:
+        break;
+      case CodeRepoOperation.codeStatistic:
+        // TODO: Handle this case.
+      case CodeRepoOperation.repoDependencies:
+        // TODO: Handle this case.
     }
   }
 }

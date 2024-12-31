@@ -81,25 +81,36 @@ class CodeRepoEntity {
 
   /// [action]
   /// 根据[action]，决定了哪些参数有值
-  Future<void> execGitCMD(GitAction action,
+  Future<void> execGitCMD(CodeRepoOperation action,
       {String? branchName, String? tagName}) async {
     Directory wd = Directory(repoDir);
     try {
       switch (action) {
-        case GitAction.checkout:
+        case CodeRepoOperation.checkout:
           codeRepoStatus.sink
               .add(CodeRepoStatusUpdating(action: 'checkout $branchName'));
           await gitEntity.checkout(wd, branchName ?? '');
           break;
-        case GitAction.pull:
+        case CodeRepoOperation.pull:
           codeRepoStatus.sink.add(CodeRepoStatusUpdating(action: 'pull'));
           await gitEntity.pull(wd);
           break;
-        case GitAction.tag:
+        case CodeRepoOperation.tag:
           codeRepoStatus.sink
               .add(CodeRepoStatusUpdating(action: 'tag $tagName'));
           await gitEntity.tag(wd, tagName ?? '');
           break;
+        case CodeRepoOperation.branch:
+          codeRepoStatus.sink
+              .add(CodeRepoStatusUpdating(action: 'branch $branchName'));
+          await gitEntity.createBranch(wd, branchName ?? '');
+          break;
+        case CodeRepoOperation.publish:
+          break;
+        case CodeRepoOperation.codeStatistic:
+          // TODO: Handle this case.
+        case CodeRepoOperation.repoDependencies:
+          // TODO: Handle this case.
       }
 
       codeRepoStatus.sink
@@ -220,6 +231,25 @@ class GitEntity {
     }, ifRight: (value) {
       return true;
     });
+
+    return res;
+  }
+
+  /// 创建branch
+  Future<bool> createBranch(Directory workDir, String branchName) async {
+    var createBranch = GitBranch(workDir: workDir, branchName: branchName);
+    var either = await createBranch.run();
+    bool res = either.fold(ifLeft: (value) {
+      return false;
+    }, ifRight: (value) {
+      return true;
+    });
+
+    if (res) {
+      // 切到对应分支
+      await checkout(workDir, branchName);
+      await queryAllBranches(workDir);
+    }
 
     return res;
   }

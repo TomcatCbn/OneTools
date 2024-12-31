@@ -9,7 +9,7 @@ class CodeRepoMgmtInitEvent extends CodeRepoMgmtEvent {}
 
 /// 仓库操作
 class CodeRepoOperationEvent extends CodeRepoMgmtEvent {
-  final GitAction operation;
+  final CodeRepoOperation operation;
   final BuildContext context;
 
   CodeRepoOperationEvent({required this.context, required this.operation});

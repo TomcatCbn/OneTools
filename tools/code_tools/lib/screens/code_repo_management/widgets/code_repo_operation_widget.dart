@@ -4,7 +4,7 @@ import 'package:platform_utils/platform_screenutils.dart';
 class CodeRepoOperationsWidget extends StatelessWidget {
   final List<CodeRepoOperationItemState> items;
 
-  CodeRepoOperationsWidget({required this.items, super.key});
+  const CodeRepoOperationsWidget({required this.items, super.key});
 
   @override
   Widget build(BuildContext context) {
