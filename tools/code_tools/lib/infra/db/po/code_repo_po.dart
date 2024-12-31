@@ -11,9 +11,10 @@ import 'project_po.dart';
   )
 ])
 class CodeRepoPo {
-  @primaryKey
   @ColumnInfo(name: 'code_repo_name')
   final String codeRepoName;
+
+  @primaryKey
   @ColumnInfo(name: 'repo_url')
   final String repoUrl;
 

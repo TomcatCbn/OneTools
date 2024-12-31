@@ -100,7 +100,7 @@ class _$CodeToolsDatabase extends CodeToolsDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `project` (`project_name` TEXT NOT NULL, `project_desc` TEXT NOT NULL, `work_dir` TEXT NOT NULL, PRIMARY KEY (`project_name`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `code_repo` (`code_repo_name` TEXT NOT NULL, `repo_url` TEXT NOT NULL, `work_dir` TEXT NOT NULL, `project` TEXT NOT NULL, FOREIGN KEY (`project`) REFERENCES `project` (`project_name`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`code_repo_name`))');
+            'CREATE TABLE IF NOT EXISTS `code_repo` (`code_repo_name` TEXT NOT NULL, `repo_url` TEXT NOT NULL, `work_dir` TEXT NOT NULL, `project` TEXT NOT NULL, FOREIGN KEY (`project`) REFERENCES `project` (`project_name`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`repo_url`))');
         await database.execute(
             'CREATE INDEX `index_project_project_name` ON `project` (`project_name`)');
 
@@ -217,7 +217,7 @@ class _$CodeRepoDao extends CodeRepoDao {
         _codeRepoPoUpdateAdapter = UpdateAdapter(
             database,
             'code_repo',
-            ['code_repo_name'],
+            ['repo_url'],
             (CodeRepoPo item) => <String, Object?>{
                   'code_repo_name': item.codeRepoName,
                   'repo_url': item.repoUrl,
@@ -227,7 +227,7 @@ class _$CodeRepoDao extends CodeRepoDao {
         _codeRepoPoDeletionAdapter = DeletionAdapter(
             database,
             'code_repo',
-            ['code_repo_name'],
+            ['repo_url'],
             (CodeRepoPo item) => <String, Object?>{
                   'code_repo_name': item.codeRepoName,
                   'repo_url': item.repoUrl,
