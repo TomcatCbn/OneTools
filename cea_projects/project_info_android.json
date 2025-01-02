@@ -3,8 +3,12 @@
   "projectDesc": "CEA OneSDK android",
   "codeRepos": [
     {
+      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/cli-tools.git"
+    },
+    {
       "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/android/debugtools.git"
-    },{
+    },
+    {
       "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/android/libblekt.git"
     },
     {
@@ -39,6 +43,9 @@
     },
     {
       "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/android/xpnetwork.git"
+    },
+    {
+      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/android/xpbasetools.git"
     },
     {
       "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/android/xtee.git"
