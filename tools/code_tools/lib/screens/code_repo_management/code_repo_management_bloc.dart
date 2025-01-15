@@ -15,14 +15,12 @@ import '../code_repo_batch_operate/batch_operate_state.dart';
 class CodeRepoMgmtBloc extends BaseBloc<CodeRepoMgmtEvent, CodeRepoMgmtState> {
   static const String _tag = 'CodeRepoBloc';
   final String projectName;
-  final String workDir;
   final ProjectUseCase projectUseCase;
 
   late ProjectAggregate projectAggregate;
 
   CodeRepoMgmtBloc(
       {required this.projectName,
-      required this.workDir,
       required this.projectUseCase})
       : super(const CodeRepoMgmtState()) {
     on<CodeRepoMgmtInitEvent>(_onCodeRepoInitEvent);
@@ -34,7 +32,7 @@ class CodeRepoMgmtBloc extends BaseBloc<CodeRepoMgmtEvent, CodeRepoMgmtState> {
       CodeRepoMgmtInitEvent event, Emitter<CodeRepoMgmtState> emit) async {
     Logger.i(msg: 'CodeRepoInitEvent...', tag: _tag);
 
-    final t = await projectUseCase.loadProjectBy(projectName, workDir);
+    final t = await projectUseCase.loadProjectBy(projectName);
     if (t == null) {
       toastHelper.showToast(msg: '找不到$projectName');
       navigatorKey.currentState?.pop();

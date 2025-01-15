@@ -73,7 +73,7 @@ class WorkspaceHomeBloc
       // 初始化数据库
       await $FloorCodeToolsDatabase
           .databaseBuilder(
-              '${firstWhere.workSpaceDir}/db/${firstWhere.workSpaceName}.db')
+              '${firstWhere.workSpaceDir.path}/db/${firstWhere.workSpaceName}.db')
           .build()
           .then((onValue) {
         codeToolsDatabase = onValue;

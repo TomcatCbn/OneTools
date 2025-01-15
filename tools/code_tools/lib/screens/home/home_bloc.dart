@@ -8,7 +8,6 @@ import 'package:platform_utils/platform_utils.dart';
 
 import '../../domain/entities/project.dart';
 import '../../domain/usecases/project_usecase.dart';
-import '../../plugin/code_tools_plugins.dart';
 import 'home_event.dart';
 import 'home_state.dart';
 
@@ -28,8 +27,7 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
   FutureOr<void> _onInitHomeEvent(
       HomeInitEvent event, Emitter<HomeState> emit) async {
     toastHelper.showLoading();
-    var allProjects =
-        await projectUseCase.loadAllProjects(workDir: workDir.path);
+    var allProjects = await projectUseCase.loadAllProjects();
     projects = allProjects;
     toastHelper.dismissLoading();
     emit(state.copyWith(
@@ -57,8 +55,7 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
 
       for (final file in filePickerResult.xFiles) {
         var json = await file.readAsString();
-        var project = projectUseCase.createProjectBy(
-            json, workDir.path);
+        var project = projectUseCase.createProjectBy(json, workDir.path);
         await projectUseCase.addOrUpdateProject(project);
       }
 
@@ -81,8 +78,7 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
       Navigator.push(
         event.context,
         MaterialPageRoute(builder: (BuildContext context) {
-          return CodeRepoMgmtScreen(
-              projectName: firstWhere.projectName, workDir: firstWhere.workDir);
+          return CodeRepoMgmtScreen(projectName: firstWhere.projectName);
         }),
       );
     }

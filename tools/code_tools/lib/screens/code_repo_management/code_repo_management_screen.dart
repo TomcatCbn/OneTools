@@ -15,10 +15,8 @@ import 'widgets/code_repo_operation_widget.dart';
 
 class CodeRepoMgmtScreen extends StatelessWidget {
   final String projectName;
-  final String workDir;
 
-  const CodeRepoMgmtScreen(
-      {required this.projectName, required this.workDir, super.key});
+  const CodeRepoMgmtScreen({required this.projectName, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,23 +32,21 @@ class CodeRepoMgmtScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: _BodyWidget(projectName, workDir),
+      body: _BodyWidget(projectName),
     );
   }
 }
 
 class _BodyWidget extends StatelessWidget {
   final String projectName;
-  final String workDir;
 
-  const _BodyWidget(this.projectName, this.workDir);
+  const _BodyWidget(this.projectName);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => CodeRepoMgmtBloc(
           projectName: projectName,
-          workDir: workDir,
           projectUseCase: ProjectUseCase(
               repo: ProjectRepoImpl(localDataSource: ProjectLocalDataSource()),
               projectFactory: ProjectFactoryImpl()))

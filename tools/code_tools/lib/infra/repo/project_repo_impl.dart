@@ -14,13 +14,13 @@ class ProjectRepoImpl implements ProjectRepo {
   }
 
   @override
-  Future<List<ProjectAggregate>> loadAllProject({String workDir = ''}) async {
-    return _localDataSource.loadAllProject(workDir);
+  Future<List<ProjectAggregate>> loadAllProject() async {
+    return _localDataSource.loadAllProject();
   }
 
   @override
-  Future<ProjectAggregate?> loadProject(String projectName, String workDir) {
-    return _localDataSource.loadProject(projectName, workDir);
+  Future<ProjectAggregate?> loadProject(String projectName) {
+    return _localDataSource.loadProject(projectName);
   }
 
   @override
@@ -34,8 +34,8 @@ class ProjectRepoImpl implements ProjectRepo {
   }
 
   @override
-  Future<bool> isProjectExist(String projectName,String workDir) {
-    return _localDataSource.isProjectExist(projectName,workDir);
+  Future<bool> isProjectExist(String projectName) {
+    return _localDataSource.isProjectExist(projectName);
   }
 
   @override
