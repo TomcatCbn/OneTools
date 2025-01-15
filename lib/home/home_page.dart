@@ -59,23 +59,26 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ..._plugins.map((p) => ElevatedButton(
-                  child: Text(p.displayName),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/code_tools/home');
-                  },
-                ))
-          ],
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: Text(widget.title),
         ),
-      ),
-    );
+        body: Padding(
+          padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                ..._plugins.map((p) => ElevatedButton(
+                      child: Text(p.displayName),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/code_tools/home');
+                      },
+                    ))
+              ],
+            ),
+          ),
+        ));
   }
 }

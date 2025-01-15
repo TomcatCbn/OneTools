@@ -38,7 +38,7 @@ class ProjectAggregate {
   }
 
   /// 配置项目中的所有子模块
-  Future<void> config() async {
+  Future<void> config({bool useProxy = false, String proxyValue = ''}) async {
     // 先检查工作路径
     var directory = Directory(projectDir);
     Logger.i(msg: '工作目录如下：${directory.path}');
@@ -49,12 +49,9 @@ class ProjectAggregate {
     }
 
     // gitlab dns无法解析，需要设置环境变量
-    if (projectName.contains('cea')) {
+    if (useProxy) {
       // cea
-      await GitProxy(proxy: 'http://10.231.16.102:3192', workDir: directory)
-          .run();
-    } else {
-      await GitProxy(proxy: 'http://127.0.0.1:7890', workDir: directory).run();
+      await GitProxy(proxy: proxyValue, workDir: directory).run();
     }
 
     Logger.i(msg: 'project config finish...');

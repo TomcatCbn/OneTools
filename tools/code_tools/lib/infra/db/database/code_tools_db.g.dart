@@ -166,22 +166,27 @@ class _$ProjectDao extends ProjectDao {
   final DeletionAdapter<ProjectPo> _projectPoDeletionAdapter;
 
   @override
-  Future<List<ProjectPo>> findAllProject() async {
-    return _queryAdapter.queryList('SELECT * FROM project',
-        mapper: (Map<String, Object?> row) => ProjectPo(
-            projectName: row['project_name'] as String,
-            projectDesc: row['project_desc'] as String,
-            workDir: row['work_dir'] as String));
-  }
-
-  @override
-  Future<ProjectPo?> findProjectBy(String projectName) async {
-    return _queryAdapter.query('SELECT * FROM project WHERE project_name = ?1',
+  Future<List<ProjectPo>> findAllProject(String workDir) async {
+    return _queryAdapter.queryList('SELECT * FROM project WHERE work_dir = ?1',
         mapper: (Map<String, Object?> row) => ProjectPo(
             projectName: row['project_name'] as String,
             projectDesc: row['project_desc'] as String,
             workDir: row['work_dir'] as String),
-        arguments: [projectName]);
+        arguments: [workDir]);
+  }
+
+  @override
+  Future<ProjectPo?> findProjectBy(
+    String projectName,
+    String workDir,
+  ) async {
+    return _queryAdapter.query(
+        'SELECT * FROM project WHERE project_name = ?1 AND work_dir = ?2',
+        mapper: (Map<String, Object?> row) => ProjectPo(
+            projectName: row['project_name'] as String,
+            projectDesc: row['project_desc'] as String,
+            workDir: row['work_dir'] as String),
+        arguments: [projectName, workDir]);
   }
 
   @override
@@ -269,14 +274,18 @@ class _$CodeRepoDao extends CodeRepoDao {
   }
 
   @override
-  Future<List<CodeRepoPo>> findAllCodeRepoBy(String project) async {
-    return _queryAdapter.queryList('SELECT * FROM code_repo WHERE project = ?1',
+  Future<List<CodeRepoPo>> findAllCodeRepoBy(
+    String project,
+    String workDir,
+  ) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM code_repo WHERE project = ?1 AND work_dir = ?2',
         mapper: (Map<String, Object?> row) => CodeRepoPo(
             codeRepoName: row['code_repo_name'] as String,
             repoUrl: row['repo_url'] as String,
             workDir: row['work_dir'] as String,
             project: row['project'] as String),
-        arguments: [project]);
+        arguments: [project, workDir]);
   }
 
   @override

@@ -1,9 +1,10 @@
+import 'package:code_tools/infra/db/database/work_space_db.dart';
+import 'package:code_tools/screens/workspace_home/workspace_home_screen.dart';
 import 'package:flutter/widgets.dart';
 import 'package:platform_plugins/platform_plugins.dart';
 import 'package:platform_utils/platform_utils.dart';
 
 import '../infra/db/database/code_tools_db.dart';
-import '../screens/home/home_screen.dart';
 
 class CodeTools implements PlatformPlugin, PlatformPluginLifeCycleListener {
   static final CodeTools _codeTools = CodeTools._();
@@ -16,7 +17,7 @@ class CodeTools implements PlatformPlugin, PlatformPluginLifeCycleListener {
   String get description => '代码仓库的管理，包括批量进行Pull、Push、Checkout';
 
   @override
-  String get displayName => 'Code仓库操作';
+  String get displayName => '项目Code仓库操作工具';
 
   @override
   String get pluginId => 'code_tools';
@@ -26,7 +27,7 @@ class CodeTools implements PlatformPlugin, PlatformPluginLifeCycleListener {
 
   @override
   Map<String, WidgetBuilder> get routes => {
-        '/code_tools/home': (context) => const HomeScreen(),
+        '/code_tools/home': (context) => const WorkSpaceHomeScreen(),
       };
 
   @override
@@ -50,13 +51,13 @@ class CodeTools implements PlatformPlugin, PlatformPluginLifeCycleListener {
   }
 
   void _onPluginCreate() async {
-    // 初始化数据库
-    $FloorCodeToolsDatabase
+    await $FloorWorkSpaceDatabase
         .databaseBuilder(
-            '${settings.workSpace}/$workDirName/db/code_tools_database.db')
+            '${settings.workSpace}/db/${CodeTools().pluginId}.db')
         .build()
         .then((onValue) {
-      codeToolsDatabase = onValue;
+      workSpaceDatabase = onValue;
     });
+    await PlatformSettingBox().init();
   }
 }

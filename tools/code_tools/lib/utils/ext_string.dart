@@ -1,3 +1,5 @@
+import 'dart:io';
+
 extension StrExt on String {
   String get extractName {
     var splashIndex = lastIndexOf('/');
@@ -15,5 +17,12 @@ extension StrExt on String {
 
   bool get isRemoteBranch {
     return startsWith('remotes/origin/');
+  }
+
+  String get adaptToMacFilePath {
+    if (Platform.isMacOS) {
+      return replaceFirst(RegExp(r'^/Volumes/Macintosh HD'), '');
+    }
+    return this;
   }
 }

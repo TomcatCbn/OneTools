@@ -3,52 +3,52 @@
   "projectDesc": "CEA OneSDK android",
   "codeRepos": [
     {
-      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/cli-tools.git"
+      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/cli-tools.git"
     },
     {
-      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/android/debugtools.git"
+      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/debugtools.git"
     },
     {
-      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/android/libblekt.git"
+      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/libblekt.git"
     },
     {
-      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/android/libmqtt.git"
+      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/libmqtt.git"
     },
     {
-      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/android/protocol-v3.git"
+      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/protocol-v3.git"
     },
     {
-      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/android/vehiclelinkext.git"
+      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/vehiclelinkext.git"
     },
     {
-      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/android/vw-vehicle-android-sdk.git"
+      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/vw-vehicle-android-sdk.git"
     },
     {
-      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/android/xipc.git"
+      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/xipc.git"
     },
     {
-      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/android/xpappstate.git"
+      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/xpappstate.git"
     },
     {
-      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/android/xpbox.git"
+      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/xpbox.git"
     },
     {
-      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/android/xpfingerprint.git"
+      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/xpfingerprint.git"
     },
     {
-      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/android/xplog.git"
+      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/xplog.git"
     },
     {
-      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/android/xpmmkv.git"
+      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/xpmmkv.git"
     },
     {
-      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/android/xpnetwork.git"
+      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/xpnetwork.git"
     },
     {
-      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/android/xpbasetools.git"
+      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/xpbasetools.git"
     },
     {
-      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/android/xtee.git"
+      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/xtee.git"
     }
   ]
 }

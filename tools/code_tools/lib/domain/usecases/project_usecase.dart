@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:code_tools/domain/entities/project.dart';
+import 'package:code_tools/domain/entities/workspace.dart';
 
 import '../factory/project_factory.dart';
 import '../repo/i_project_repo.dart';
@@ -11,14 +14,14 @@ class ProjectUseCase {
   ProjectUseCase({required this.repo, required this.projectFactory});
 
   /// 从本地加载所有的项目
-  Future<List<ProjectAggregate>> loadAllProjects() async {
-    var allProjects = await repo.loadAllProject();
+  Future<List<ProjectAggregate>> loadAllProjects({String workDir = ''}) async {
+    var allProjects = await repo.loadAllProject(workDir: workDir);
     return allProjects;
   }
 
   /// 从本地加载指定项目
-  Future<ProjectAggregate?> loadProjectBy(String projectName) async {
-    var projectAggregate = await repo.loadProject(projectName);
+  Future<ProjectAggregate?> loadProjectBy(String projectName, String workDir) async {
+    var projectAggregate = await repo.loadProject(projectName, workDir);
     return projectAggregate;
   }
 
@@ -28,7 +31,8 @@ class ProjectUseCase {
   }
 
   Future<bool> addOrUpdateProject(ProjectAggregate project) async {
-    bool exist = await repo.isProjectExist(project.projectName);
+    bool exist =
+        await repo.isProjectExist(project.projectName, project.workDir);
     if (exist) {
       // update
       return repo.updateProject(project);

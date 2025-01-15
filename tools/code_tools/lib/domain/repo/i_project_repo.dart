@@ -7,14 +7,12 @@ abstract class ProjectRepo {
 
   Future<bool> removeProject(ProjectAggregate project);
 
-  Future<ProjectAggregate?> loadProject(String projectName);
-
-  Future<bool> contains(String projectName);
+  Future<ProjectAggregate?> loadProject(String projectName, String workDir);
 
   /// 从本地加载所有的project
-  Future<List<ProjectAggregate>> loadAllProject();
+  Future<List<ProjectAggregate>> loadAllProject({String workDir = ''});
 
-  Future<bool> isProjectExist(String projectName);
+  Future<bool> isProjectExist(String projectName, String workDir);
 
   Future<bool> removeCodeRepo(String codeRepoName);
 }

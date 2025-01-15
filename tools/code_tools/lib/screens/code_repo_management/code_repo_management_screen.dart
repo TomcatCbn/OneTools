@@ -15,8 +15,10 @@ import 'widgets/code_repo_operation_widget.dart';
 
 class CodeRepoMgmtScreen extends StatelessWidget {
   final String projectName;
+  final String workDir;
 
-  const CodeRepoMgmtScreen({required this.projectName, super.key});
+  const CodeRepoMgmtScreen(
+      {required this.projectName, required this.workDir, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,21 +34,23 @@ class CodeRepoMgmtScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: _BodyWidget(projectName),
+      body: _BodyWidget(projectName, workDir),
     );
   }
 }
 
 class _BodyWidget extends StatelessWidget {
   final String projectName;
+  final String workDir;
 
-  const _BodyWidget(this.projectName);
+  const _BodyWidget(this.projectName, this.workDir);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => CodeRepoMgmtBloc(
           projectName: projectName,
+          workDir: workDir,
           projectUseCase: ProjectUseCase(
               repo: ProjectRepoImpl(localDataSource: ProjectLocalDataSource()),
               projectFactory: ProjectFactoryImpl()))
@@ -58,7 +62,8 @@ class _BodyWidget extends StatelessWidget {
                   text: 'Checkout',
                   onTap: () {
                     context.read<CodeRepoMgmtBloc>().add(CodeRepoOperationEvent(
-                        context: context, operation: CodeRepoOperation.checkout));
+                        context: context,
+                        operation: CodeRepoOperation.checkout));
                   }),
               CodeRepoOperationItemState(
                   text: 'Pull',
@@ -82,19 +87,22 @@ class _BodyWidget extends StatelessWidget {
                   text: 'Publish(Todo)',
                   onTap: () {
                     context.read<CodeRepoMgmtBloc>().add(CodeRepoOperationEvent(
-                        context: context, operation: CodeRepoOperation.publish));
+                        context: context,
+                        operation: CodeRepoOperation.publish));
                   }),
               CodeRepoOperationItemState(
                   text: 'Code统计(Todo)',
                   onTap: () {
                     context.read<CodeRepoMgmtBloc>().add(CodeRepoOperationEvent(
-                        context: context, operation: CodeRepoOperation.codeStatistic));
+                        context: context,
+                        operation: CodeRepoOperation.codeStatistic));
                   }),
               CodeRepoOperationItemState(
                   text: '依赖关系(Todo)',
                   onTap: () {
                     context.read<CodeRepoMgmtBloc>().add(CodeRepoOperationEvent(
-                        context: context, operation: CodeRepoOperation.repoDependencies));
+                        context: context,
+                        operation: CodeRepoOperation.repoDependencies));
                   }),
             ];
 

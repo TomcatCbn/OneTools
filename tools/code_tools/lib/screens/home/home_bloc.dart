@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:code_tools/screens/code_repo_management/code_repo_management_screen.dart';
 import 'package:flutter/material.dart';
@@ -13,10 +14,12 @@ import 'home_state.dart';
 
 class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
   final ProjectUseCase projectUseCase;
+  final Directory workDir;
 
   List<ProjectAggregate>? projects;
 
-  HomeBloc({required this.projectUseCase}) : super(const HomeState()) {
+  HomeBloc({required this.projectUseCase, required this.workDir})
+      : super(const HomeState()) {
     on<HomeInitEvent>(_onInitHomeEvent);
     on<HomeCreateProjectByJsonFileEvent>(_onCreateProjectByJsonFileEvent);
     on<HomeClickProjectEvent>(_onHomeClickProjectEvent);
@@ -25,7 +28,8 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
   FutureOr<void> _onInitHomeEvent(
       HomeInitEvent event, Emitter<HomeState> emit) async {
     toastHelper.showLoading();
-    var allProjects = await projectUseCase.loadAllProjects();
+    var allProjects =
+        await projectUseCase.loadAllProjects(workDir: workDir.path);
     projects = allProjects;
     toastHelper.dismissLoading();
     emit(state.copyWith(
@@ -54,7 +58,7 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
       for (final file in filePickerResult.xFiles) {
         var json = await file.readAsString();
         var project = projectUseCase.createProjectBy(
-            json, '${settings.workSpace}/${CodeTools().workDirName}');
+            json, workDir.path);
         await projectUseCase.addOrUpdateProject(project);
       }
 
@@ -77,7 +81,8 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
       Navigator.push(
         event.context,
         MaterialPageRoute(builder: (BuildContext context) {
-          return CodeRepoMgmtScreen(projectName: event.projectName);
+          return CodeRepoMgmtScreen(
+              projectName: firstWhere.projectName, workDir: firstWhere.workDir);
         }),
       );
     }

@@ -4,6 +4,7 @@ import 'package:code_tools/domain/entities/project.dart';
 import 'package:code_tools/domain/usecases/project_usecase.dart';
 import 'package:code_tools/screens/code_repo_management/code_repo_management_event.dart';
 import 'package:code_tools/screens/code_repo_management/code_repo_management_state.dart';
+import 'package:code_tools/utils/settings_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:platform_utils/platform_utils.dart';
 
@@ -14,11 +15,15 @@ import '../code_repo_batch_operate/batch_operate_state.dart';
 class CodeRepoMgmtBloc extends BaseBloc<CodeRepoMgmtEvent, CodeRepoMgmtState> {
   static const String _tag = 'CodeRepoBloc';
   final String projectName;
+  final String workDir;
   final ProjectUseCase projectUseCase;
 
   late ProjectAggregate projectAggregate;
 
-  CodeRepoMgmtBloc({required this.projectName, required this.projectUseCase})
+  CodeRepoMgmtBloc(
+      {required this.projectName,
+      required this.workDir,
+      required this.projectUseCase})
       : super(const CodeRepoMgmtState()) {
     on<CodeRepoMgmtInitEvent>(_onCodeRepoInitEvent);
     on<CodeRepoOperationEvent>(_onCodeRepoOperationEvent);
@@ -29,7 +34,7 @@ class CodeRepoMgmtBloc extends BaseBloc<CodeRepoMgmtEvent, CodeRepoMgmtState> {
       CodeRepoMgmtInitEvent event, Emitter<CodeRepoMgmtState> emit) async {
     Logger.i(msg: 'CodeRepoInitEvent...', tag: _tag);
 
-    final t = await projectUseCase.loadProjectBy(projectName);
+    final t = await projectUseCase.loadProjectBy(projectName, workDir);
     if (t == null) {
       toastHelper.showToast(msg: '找不到$projectName');
       navigatorKey.currentState?.pop();
@@ -38,7 +43,9 @@ class CodeRepoMgmtBloc extends BaseBloc<CodeRepoMgmtEvent, CodeRepoMgmtState> {
 
     projectAggregate = t;
     // 检测code repo各个状态
-    await projectAggregate.config();
+    await projectAggregate.config(
+        useProxy: PlatformSettingBox().getBool(proxyKey),
+        proxyValue: PlatformSettingBox().getString(proxyValueKey));
     emit(state.copyWith(codeRepoEntities: projectAggregate.codeRepos));
   }
 
@@ -102,9 +109,9 @@ class CodeRepoMgmtBloc extends BaseBloc<CodeRepoMgmtEvent, CodeRepoMgmtState> {
       case CodeRepoOperation.publish:
         break;
       case CodeRepoOperation.codeStatistic:
-        // TODO: Handle this case.
+      // TODO: Handle this case.
       case CodeRepoOperation.repoDependencies:
-        // TODO: Handle this case.
+      // TODO: Handle this case.
     }
   }
 }

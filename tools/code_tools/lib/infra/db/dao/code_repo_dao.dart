@@ -9,8 +9,8 @@ abstract class CodeRepoDao {
   @Query('SELECT * FROM code_repo WHERE repo_url = :repoUrl')
   Future<CodeRepoPo?> findCodeRepoBy(String repoUrl);
 
-  @Query('SELECT * FROM code_repo WHERE project = :project')
-  Future<List<CodeRepoPo>> findAllCodeRepoBy(String project);
+  @Query('SELECT * FROM code_repo WHERE project = :project AND work_dir = :workDir')
+  Future<List<CodeRepoPo>> findAllCodeRepoBy(String project, String workDir);
 
   @insert
   Future<void> insertCodeRepo(CodeRepoPo codeRepo);

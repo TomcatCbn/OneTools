@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:code_tools/domain/factory/project_factory.dart';
 import 'package:code_tools/domain/usecases/project_usecase.dart';
 import 'package:code_tools/infra/datasource/project_data_source.dart';
@@ -11,25 +13,36 @@ import 'package:platform_utils/platform_screenutils.dart';
 import 'home_event.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  final Directory workDir;
+
+  const HomeScreen({required this.workDir, super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Theme
+            .of(context)
+            .colorScheme
+            .inversePrimary,
         title: const Text('Project 管理'),
       ),
-      body: _BodyWidget(),
+      body: _BodyWidget(workDir: workDir,),
     );
   }
 }
 
 class _BodyWidget extends StatelessWidget {
+  final Directory workDir;
+
+  const _BodyWidget({required this.workDir});
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => HomeBloc(
+      create: (context) =>
+      HomeBloc(
+          workDir: workDir,
           projectUseCase: ProjectUseCase(
               repo: ProjectRepoImpl(localDataSource: ProjectLocalDataSource()),
               projectFactory: ProjectFactoryImpl()))
@@ -62,7 +75,10 @@ class _BodyWidget extends StatelessWidget {
                 padding: EdgeInsets.symmetric(vertical: 16.h),
                 child: Center(
                   child: Column(children: [
-                    Text(project.projectName,style: TextStyle(fontSize: 12.0.sp),),
+                    Text(
+                      project.projectName,
+                      style: TextStyle(fontSize: 12.0.sp),
+                    ),
                     Text('Desc: ${project.projectDesc}'),
                     Text('ProjectDir: ${project.projectDir}'),
                     Text('CodeRepo count: ${project.codeRepoCount}')
@@ -73,9 +89,10 @@ class _BodyWidget extends StatelessWidget {
           );
         },
         itemCount: state.projects.length,
-        separatorBuilder: (context, index) => SizedBox(
-          height: 2.h,
-        ),
+        separatorBuilder: (context, index) =>
+            SizedBox(
+              height: 2.h,
+            ),
       );
     }
 

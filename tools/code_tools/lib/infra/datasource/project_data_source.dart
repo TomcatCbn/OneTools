@@ -29,10 +29,14 @@ class ProjectLocalDataSource {
     return true;
   }
 
-  Future<List<ProjectAggregate>> loadAllProject() async {
-    var pos = await projectDao.findAllProject();
+  Future<List<ProjectAggregate>> loadAllProject(String workDir) async {
+    if (workDir.isEmpty) {
+      return [];
+    }
+    var pos = await projectDao.findAllProject(workDir);
     var projects = pos.map((e) async {
-      var codeRepos = await codeRepoDao.findAllCodeRepoBy(e.projectName);
+      var codeRepos = await codeRepoDao.findAllCodeRepoBy(
+          e.projectName, '$workDir/${e.projectName}');
       return ProjectAggregate.fromDb(
           projectName: e.projectName,
           projectDesc: e.projectDesc,
@@ -43,13 +47,15 @@ class ProjectLocalDataSource {
     return wait;
   }
 
-  Future<ProjectAggregate?> loadProject(String projectName) async {
-    var po = await projectDao.findProjectBy(projectName);
+  Future<ProjectAggregate?> loadProject(
+      String projectName, String workDir) async {
+    var po = await projectDao.findProjectBy(projectName, workDir);
     if (po == null) {
       return null;
     }
 
-    var codeRepos = await codeRepoDao.findAllCodeRepoBy(projectName);
+    var codeRepos = await codeRepoDao.findAllCodeRepoBy(
+        projectName, '${po.workDir}/${po.projectName}');
 
     return ProjectAggregate.fromDb(
         projectName: po.projectName,
@@ -103,8 +109,8 @@ class ProjectLocalDataSource {
     return true;
   }
 
-  Future<bool> isProjectExist(String projectName) async {
-    var projectPo = await projectDao.findProjectBy(projectName);
+  Future<bool> isProjectExist(String projectName, String workDir) async {
+    var projectPo = await projectDao.findProjectBy(projectName, workDir);
     return projectPo != null;
   }
 
