@@ -31,6 +31,32 @@ class BatchOperateScreen extends StatelessWidget {
                     child: Center(
                       child: Padding(
                         padding: EdgeInsets.all(16.r),
+                        child: const Text('当前全选'),
+                      ),
+                    ),
+                    onTap: () {
+                      context
+                          .read<BatchOperateBloc>()
+                          .add(BatchOperateAllSelectEvent(allSelected: true));
+                    },
+                  ),
+                  InkWell(
+                    child: Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(16.r),
+                        child: const Text('当前全不选'),
+                      ),
+                    ),
+                    onTap: () {
+                      context
+                          .read<BatchOperateBloc>()
+                          .add(BatchOperateAllSelectEvent(allSelected: false));
+                    },
+                  ),
+                  InkWell(
+                    child: Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(16.r),
                         child: const Text('Confirm'),
                       ),
                     ),

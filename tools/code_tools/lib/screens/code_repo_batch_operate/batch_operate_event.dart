@@ -21,6 +21,11 @@ class BatchOperateCreateTagEvent extends BatchOperateEvent {
 }
 
 class BatchOperateConfirmEvent extends BatchOperateEvent {}
+class BatchOperateAllSelectEvent extends BatchOperateEvent {
+  final bool allSelected;
+
+  BatchOperateAllSelectEvent({required this.allSelected});
+}
 
 class BatchOperateSearchKeyWordEvent extends BatchOperateEvent {
   final String keyWord;

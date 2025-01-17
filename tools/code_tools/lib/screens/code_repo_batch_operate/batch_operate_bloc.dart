@@ -12,6 +12,7 @@ class BatchOperateBloc extends BaseBloc<BatchOperateEvent, BatchOperateState> {
 
   // 用于筛选框
   final TextEditingController filtercontroller = TextEditingController();
+
   // 用于输入目标名称框
   final TextEditingController targetNameController = TextEditingController();
 
@@ -26,6 +27,7 @@ class BatchOperateBloc extends BaseBloc<BatchOperateEvent, BatchOperateState> {
     on<BatchOperateSearchKeyWordEvent>(_onSearchKeyWordEvent);
     on<BatchOperateConfirmEvent>(_onBatchOperateConfirmEvent);
     on<BatchOperateSelectBranchEvent>(_onBatchOperateSelectBranchEvent);
+    on<BatchOperateAllSelectEvent>(_onBatchOperateAllSelectEvent);
     on<BatchOperateCreateBranchEvent>(_onBatchOperateCreateBranchEvent);
     on<BatchOperateCreateTagEvent>(_onBatchOperateCreateTagEvent);
   }
@@ -77,8 +79,8 @@ class BatchOperateBloc extends BaseBloc<BatchOperateEvent, BatchOperateState> {
         .map((e) => e.codeRepoName)
         .toList();
     Logger.i(msg: 'BatchOperateConfirmEvent, $list');
-    navigatorKey.currentState?.pop(
-        BatchOperateRsp(codeRepos: list, targetName: state.targetName));
+    navigatorKey.currentState
+        ?.pop(BatchOperateRsp(codeRepos: list, targetName: state.targetName));
   }
 
   FutureOr<void> _onBatchOperateSelectBranchEvent(
@@ -94,5 +96,14 @@ class BatchOperateBloc extends BaseBloc<BatchOperateEvent, BatchOperateState> {
   FutureOr<void> _onBatchOperateCreateTagEvent(
       BatchOperateCreateTagEvent event, Emitter<BatchOperateState> emit) {
     emit(state.copyWith(targetName: event.tagName));
+  }
+
+  FutureOr<void> _onBatchOperateAllSelectEvent(
+      BatchOperateAllSelectEvent event, Emitter<BatchOperateState> emit) async {
+    state.codeRepos.map((e) {
+      e.isSelect = event.allSelected;
+      return e;
+    }).toList();
+    emit(state.copyWith(refreshIndex: state.refreshIndex + 1));
   }
 }
