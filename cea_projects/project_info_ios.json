@@ -4,7 +4,14 @@
   "codeRepos": [
     {
       "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/debugtools.git"
-    }, {
+    },
+    {
+      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/oneuikit.git"
+    },
+    {
+      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/XPXcomboSDK.git"
+    },
+    {
       "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/vw-vehicle-ios-demo.git"
     },
     {

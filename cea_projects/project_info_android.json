@@ -6,6 +6,15 @@
       "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/apps.git"
     },
     {
+      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/XCombo.git"
+    },
+    {
+      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/resourcesdk.git"
+    },
+    {
+      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/OneUIKit.git"
+    },
+    {
       "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/cli-tools.git"
     },
     {
