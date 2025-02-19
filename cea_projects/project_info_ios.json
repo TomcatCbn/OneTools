@@ -6,6 +6,9 @@
       "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/debugtools.git"
     },
     {
+      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/apps.git"
+    },
+    {
       "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/oneuikit.git"
     },
     {
