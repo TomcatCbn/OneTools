@@ -45,6 +45,8 @@ dependencies:
   # plugins
   code_tools:
     path: tools/code_tools
+  cicd_tools:
+    path: tools/cicd_tools
 
   # toast/dialog
   bot_toast: ^4.1.3

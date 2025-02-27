@@ -18,6 +18,9 @@ abstract class PlatformPlugin {
 
   /// all routes in plugin
   Map<String, WidgetBuilder> get routes;
+
+  /// 插件首页
+  String get homeRoute;
 }
 
 class PlatformPluginWrapper {

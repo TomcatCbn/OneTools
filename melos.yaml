@@ -3,5 +3,6 @@ name: onetools
 packages:
   - .
   - tools/code_tools
+  - tools/cicd_tools
   - platform_enabler/platform_plugins
   - platform_enabler/platform_utils

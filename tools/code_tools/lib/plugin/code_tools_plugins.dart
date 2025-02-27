@@ -4,8 +4,6 @@ import 'package:flutter/widgets.dart';
 import 'package:platform_plugins/platform_plugins.dart';
 import 'package:platform_utils/platform_utils.dart';
 
-import '../infra/db/database/code_tools_db.dart';
-
 class CodeTools implements PlatformPlugin, PlatformPluginLifeCycleListener {
   static final CodeTools _codeTools = CodeTools._();
 
@@ -60,4 +58,7 @@ class CodeTools implements PlatformPlugin, PlatformPluginLifeCycleListener {
     });
     await PlatformSettingBox().init();
   }
+
+  @override
+  String get homeRoute => '/code_tools/home';
 }

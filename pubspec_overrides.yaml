@@ -1,5 +1,7 @@
-# melos_managed_dependency_overrides: code_tools,platform_plugins,platform_utils
+# melos_managed_dependency_overrides: code_tools,platform_plugins,platform_utils,cicd_tools
 dependency_overrides:
+  cicd_tools:
+    path: tools/cicd_tools
   code_tools:
     path: tools/code_tools
   platform_plugins:

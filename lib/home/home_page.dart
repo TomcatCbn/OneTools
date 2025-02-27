@@ -73,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ..._plugins.map((p) => ElevatedButton(
                       child: Text(p.displayName),
                       onPressed: () {
-                        Navigator.pushNamed(context, '/code_tools/home');
+                        Navigator.pushNamed(context, p.homeRoute);
                       },
                     ))
               ],
