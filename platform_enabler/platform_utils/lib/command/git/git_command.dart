@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dart_either/dart_either.dart';
 import 'package:platform_utils/command/i_command.dart';
 import 'package:platform_utils/shell/shell_utils.dart';
@@ -14,6 +16,7 @@ const String _gitCMDCheckout = 'checkout';
 const String _gitCMDTag = 'tag';
 const String _gitCMDPush = 'push';
 const String _gitCMDConfig = 'config';
+const String _gitRemoteCMD = 'ls-remote';
 
 abstract class GitCMD<R> extends ShellCommand<R> {
   GitCMD({required super.workDir});
@@ -211,5 +214,83 @@ class GitProxy extends GitCMD<bool> {
         [_gitCMD, _gitCMDConfig, '--global', 'https.proxy', proxy], workDir);
 
     return const Right(true);
+  }
+}
+
+class GitRemoteQueryAllBranch extends GitCMD<List<String>> {
+  final String repo;
+
+  GitRemoteQueryAllBranch({required this.repo})
+      : super(workDir: Directory.current);
+
+  @override
+  Future<Either<E, List<String>>> run<E extends ToolsError>() async {
+    var either = await ShellUtils.execCMD(
+        [_gitCMD, _gitRemoteCMD, '--heads', repo], workDir);
+    if (either.isLeft) {
+      return Left((either as Left).value);
+    }
+    var stdout =
+        ((either as Right<ShellError, ProcessExecResult>).value.stdout ?? '')
+            .trim();
+
+    try {
+      // 解析输出
+      final branches = stdout
+          .toString()
+          .split('\n') // 分割为行
+          .map((line) => line.trim()) // 去除首尾空格
+          .where((line) => line.isNotEmpty) // 过滤掉空行
+          .map((line) {
+        // 处理分支名称
+        if (line.startsWith('*')) {
+          return line.substring(1).trim(); // 去掉当前分支的 '*' 符号
+        }
+        return line;
+      }).toList();
+
+      return Either.right(branches);
+    } catch (e) {
+      return Either.left(ShellError(stderr: '解析resp出错') as E);
+    }
+  }
+}
+
+class GitRemoteQueryAllTAG extends GitCMD<List<String>> {
+  final String repo;
+
+  GitRemoteQueryAllTAG({required this.repo})
+      : super(workDir: Directory.current);
+
+  @override
+  Future<Either<E, List<String>>> run<E extends ToolsError>() async {
+    var either = await ShellUtils.execCMD(
+        [_gitCMD, _gitRemoteCMD, '--tags', repo], workDir);
+    if (either.isLeft) {
+      return Left((either as Left).value);
+    }
+    var stdout =
+        ((either as Right<ShellError, ProcessExecResult>).value.stdout ?? '')
+            .trim();
+
+    try {
+      // 解析输出
+      final branches = stdout
+          .toString()
+          .split('\n') // 分割为行
+          .map((line) => line.trim()) // 去除首尾空格
+          .where((line) => line.isNotEmpty) // 过滤掉空行
+          .map((line) {
+        // 处理分支名称
+        if (line.startsWith('*')) {
+          return line.substring(1).trim(); // 去掉当前分支的 '*' 符号
+        }
+        return line;
+      }).toList();
+
+      return Either.right(branches);
+    } catch (e) {
+      return Either.left(ShellError(stderr: '解析resp出错') as E);
+    }
   }
 }

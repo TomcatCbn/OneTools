@@ -17,6 +17,9 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$PipelineHomeState {
   Pipeline? get pipeline => throw _privateConstructorUsedError;
+  List<ModuleState> get modules =>
+      throw _privateConstructorUsedError; // 当前默认选中的module
+  ModuleState? get selected => throw _privateConstructorUsedError;
 
   /// Create a copy of PipelineHomeState
   /// with the given fields replaced by the non-null parameter values.
@@ -31,7 +34,8 @@ abstract class $PipelineHomeStateCopyWith<$Res> {
           PipelineHomeState value, $Res Function(PipelineHomeState) then) =
       _$PipelineHomeStateCopyWithImpl<$Res, PipelineHomeState>;
   @useResult
-  $Res call({Pipeline? pipeline});
+  $Res call(
+      {Pipeline? pipeline, List<ModuleState> modules, ModuleState? selected});
 }
 
 /// @nodoc
@@ -50,12 +54,22 @@ class _$PipelineHomeStateCopyWithImpl<$Res, $Val extends PipelineHomeState>
   @override
   $Res call({
     Object? pipeline = freezed,
+    Object? modules = null,
+    Object? selected = freezed,
   }) {
     return _then(_value.copyWith(
       pipeline: freezed == pipeline
           ? _value.pipeline
           : pipeline // ignore: cast_nullable_to_non_nullable
               as Pipeline?,
+      modules: null == modules
+          ? _value.modules
+          : modules // ignore: cast_nullable_to_non_nullable
+              as List<ModuleState>,
+      selected: freezed == selected
+          ? _value.selected
+          : selected // ignore: cast_nullable_to_non_nullable
+              as ModuleState?,
     ) as $Val);
   }
 }
@@ -68,7 +82,8 @@ abstract class _$$PipelineHomeStateImplCopyWith<$Res>
       __$$PipelineHomeStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Pipeline? pipeline});
+  $Res call(
+      {Pipeline? pipeline, List<ModuleState> modules, ModuleState? selected});
 }
 
 /// @nodoc
@@ -85,12 +100,22 @@ class __$$PipelineHomeStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? pipeline = freezed,
+    Object? modules = null,
+    Object? selected = freezed,
   }) {
     return _then(_$PipelineHomeStateImpl(
       pipeline: freezed == pipeline
           ? _value.pipeline
           : pipeline // ignore: cast_nullable_to_non_nullable
               as Pipeline?,
+      modules: null == modules
+          ? _value._modules
+          : modules // ignore: cast_nullable_to_non_nullable
+              as List<ModuleState>,
+      selected: freezed == selected
+          ? _value.selected
+          : selected // ignore: cast_nullable_to_non_nullable
+              as ModuleState?,
     ));
   }
 }
@@ -98,14 +123,30 @@ class __$$PipelineHomeStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$PipelineHomeStateImpl implements _PipelineHomeState {
-  const _$PipelineHomeStateImpl({this.pipeline});
+  const _$PipelineHomeStateImpl(
+      {this.pipeline,
+      final List<ModuleState> modules = const [],
+      this.selected})
+      : _modules = modules;
 
   @override
   final Pipeline? pipeline;
+  final List<ModuleState> _modules;
+  @override
+  @JsonKey()
+  List<ModuleState> get modules {
+    if (_modules is EqualUnmodifiableListView) return _modules;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_modules);
+  }
+
+// 当前默认选中的module
+  @override
+  final ModuleState? selected;
 
   @override
   String toString() {
-    return 'PipelineHomeState(pipeline: $pipeline)';
+    return 'PipelineHomeState(pipeline: $pipeline, modules: $modules, selected: $selected)';
   }
 
   @override
@@ -114,11 +155,15 @@ class _$PipelineHomeStateImpl implements _PipelineHomeState {
         (other.runtimeType == runtimeType &&
             other is _$PipelineHomeStateImpl &&
             (identical(other.pipeline, pipeline) ||
-                other.pipeline == pipeline));
+                other.pipeline == pipeline) &&
+            const DeepCollectionEquality().equals(other._modules, _modules) &&
+            (identical(other.selected, selected) ||
+                other.selected == selected));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, pipeline);
+  int get hashCode => Object.hash(runtimeType, pipeline,
+      const DeepCollectionEquality().hash(_modules), selected);
 
   /// Create a copy of PipelineHomeState
   /// with the given fields replaced by the non-null parameter values.
@@ -131,11 +176,17 @@ class _$PipelineHomeStateImpl implements _PipelineHomeState {
 }
 
 abstract class _PipelineHomeState implements PipelineHomeState {
-  const factory _PipelineHomeState({final Pipeline? pipeline}) =
-      _$PipelineHomeStateImpl;
+  const factory _PipelineHomeState(
+      {final Pipeline? pipeline,
+      final List<ModuleState> modules,
+      final ModuleState? selected}) = _$PipelineHomeStateImpl;
 
   @override
   Pipeline? get pipeline;
+  @override
+  List<ModuleState> get modules; // 当前默认选中的module
+  @override
+  ModuleState? get selected;
 
   /// Create a copy of PipelineHomeState
   /// with the given fields replaced by the non-null parameter values.

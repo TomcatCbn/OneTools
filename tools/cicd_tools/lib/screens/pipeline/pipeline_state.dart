@@ -5,7 +5,19 @@ part 'pipeline_state.freezed.dart';
 
 @freezed
 class PipelineHomeState with _$PipelineHomeState {
-  const factory PipelineHomeState({Pipeline? pipeline}) =
-      _PipelineHomeState;
+  const factory PipelineHomeState({
+    Pipeline? pipeline,
+    @Default([]) List<ModuleState> modules,
+    // 当前默认选中的module
+    ModuleState? selected,
+  }) = _PipelineHomeState;
 }
 
+class ModuleState {
+  final String moduleName;
+  List<String> branches = [];
+
+  String selectBranch = '';
+
+  ModuleState({required this.moduleName});
+}
