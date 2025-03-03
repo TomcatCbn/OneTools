@@ -30,6 +30,7 @@ const int _baseCode = -1000;
 /// 入参无效
 const int paramsInvalid = _baseCode - 1;
 const int commandLineInvalid = _baseCode - 2;
+const int commandNoPermission = _baseCode - 3;
 
 class CommonError extends ToolsError {
   CommonError.paramsInvalid()
@@ -37,6 +38,8 @@ class CommonError extends ToolsError {
 
   CommonError.shellCMDNotExist()
       : super(errorCode: commandLineInvalid, errorMsg: '命令不存在');
+
+  CommonError.noPermission() :super(errorCode: commandNoPermission, errorMsg: '没有权限');
 
   CommonError.unknown() : super(errorCode: _baseCode, errorMsg: 'unknown');
 }

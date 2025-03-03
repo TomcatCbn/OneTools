@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cicd_tools/cicd_tools.dart';
+import 'package:cicd_tools/domain/entities/publish_type.dart';
 import 'package:cicd_tools/screens/pipeline/pipeline_event.dart';
 import 'package:cicd_tools/screens/pipeline/pipeline_state.dart';
+import 'package:flutter/material.dart';
 import 'package:platform_utils/platform_utils.dart';
 
 import '../../config/config_onesdk/module_repo_impl.dart';
@@ -43,6 +45,7 @@ class PipelineHomeBloc extends BaseBloc<PipelineHomeEvent, PipelineHomeState> {
 
   FutureOr<void> _onModuleSelectEvent(
       ModuleSelectEvent event, Emitter<PipelineHomeState> emit) async {
+    Logger.i(msg: '_onModuleSelectEvent...${event.moduleState}');
     // 更新module，拉取branch
     var moduleName = event.moduleState?.moduleName;
     if (moduleName == null || moduleName.isEmpty) {
@@ -58,17 +61,60 @@ class PipelineHomeBloc extends BaseBloc<PipelineHomeEvent, PipelineHomeState> {
 
     var queryBranches =
         await moduleEntity.queryBranches(moduleEntity.repo.repoUrl);
+    var branches = queryBranches.fold(
+        ifLeft: (e) {
+          toastHelper.showToast(msg: e.msg);
+          return <String>[];
+        },
+        ifRight: (v) => v);
 
     event.moduleState!.branches
       ..clear()
-      ..addAll(queryBranches);
+      ..addAll(branches);
+    event.moduleState!.selectBranch = branches.first;
 
     emit(state.copyWith(selected: event.moduleState));
   }
 
   FutureOr<void> _onBranchSelectEvent(
-      BranchSelectEvent event, Emitter<PipelineHomeState> emit) {}
+      BranchSelectEvent event, Emitter<PipelineHomeState> emit) async {
+    Logger.i(msg: '_onBranchSelectEvent..., ${event.branch}');
+    var selected = state.selected;
+    if (selected == null) {
+      return;
+    }
+    selected.selectBranch = event.branch ?? '';
+
+    emit(state.copyWith(refreshIndex: state.refreshIndex + 1));
+  }
 
   FutureOr<void> _onStartPipelineEvent(
-      PipelineStartEvent event, Emitter<PipelineHomeState> emit) {}
+      PipelineStartEvent event, Emitter<PipelineHomeState> emit) async {
+    Logger.i(msg: '_onStartPipelineEvent...');
+    var selected = state.selected;
+    if (selected == null || selected.selectBranch.isEmpty) {
+      toastHelper.showToast(msg: '参数不正确');
+      return;
+    }
+    var module = _allModules[selected.moduleName];
+    if (module == null) {
+      toastHelper.showToast(msg: '参数不正确');
+      return;
+    }
+
+    var pipeline = _useCase.createPipeline(PublishType.aar, module,
+        branch: selected.selectBranch);
+    if (pipeline == null) {
+      toastHelper.showToast(msg: '创建pipeline失败');
+      return;
+    }
+
+    var either = await pipeline.run({});
+    either.fold(ifLeft: (e) {
+      toastHelper.showToast(msg: 'pipeline运行失败');
+    }, ifRight: (v) {
+      toastHelper.showToast(msg: 'pipeline运行成功');
+      Navigator.pop(navigatorKey.currentContext!);
+    });
+  }
 }

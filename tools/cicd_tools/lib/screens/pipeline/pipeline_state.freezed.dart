@@ -20,6 +20,7 @@ mixin _$PipelineHomeState {
   List<ModuleState> get modules =>
       throw _privateConstructorUsedError; // 当前默认选中的module
   ModuleState? get selected => throw _privateConstructorUsedError;
+  int get refreshIndex => throw _privateConstructorUsedError;
 
   /// Create a copy of PipelineHomeState
   /// with the given fields replaced by the non-null parameter values.
@@ -35,7 +36,10 @@ abstract class $PipelineHomeStateCopyWith<$Res> {
       _$PipelineHomeStateCopyWithImpl<$Res, PipelineHomeState>;
   @useResult
   $Res call(
-      {Pipeline? pipeline, List<ModuleState> modules, ModuleState? selected});
+      {Pipeline? pipeline,
+      List<ModuleState> modules,
+      ModuleState? selected,
+      int refreshIndex});
 }
 
 /// @nodoc
@@ -56,6 +60,7 @@ class _$PipelineHomeStateCopyWithImpl<$Res, $Val extends PipelineHomeState>
     Object? pipeline = freezed,
     Object? modules = null,
     Object? selected = freezed,
+    Object? refreshIndex = null,
   }) {
     return _then(_value.copyWith(
       pipeline: freezed == pipeline
@@ -70,6 +75,10 @@ class _$PipelineHomeStateCopyWithImpl<$Res, $Val extends PipelineHomeState>
           ? _value.selected
           : selected // ignore: cast_nullable_to_non_nullable
               as ModuleState?,
+      refreshIndex: null == refreshIndex
+          ? _value.refreshIndex
+          : refreshIndex // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -83,7 +92,10 @@ abstract class _$$PipelineHomeStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {Pipeline? pipeline, List<ModuleState> modules, ModuleState? selected});
+      {Pipeline? pipeline,
+      List<ModuleState> modules,
+      ModuleState? selected,
+      int refreshIndex});
 }
 
 /// @nodoc
@@ -102,6 +114,7 @@ class __$$PipelineHomeStateImplCopyWithImpl<$Res>
     Object? pipeline = freezed,
     Object? modules = null,
     Object? selected = freezed,
+    Object? refreshIndex = null,
   }) {
     return _then(_$PipelineHomeStateImpl(
       pipeline: freezed == pipeline
@@ -116,6 +129,10 @@ class __$$PipelineHomeStateImplCopyWithImpl<$Res>
           ? _value.selected
           : selected // ignore: cast_nullable_to_non_nullable
               as ModuleState?,
+      refreshIndex: null == refreshIndex
+          ? _value.refreshIndex
+          : refreshIndex // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -126,7 +143,8 @@ class _$PipelineHomeStateImpl implements _PipelineHomeState {
   const _$PipelineHomeStateImpl(
       {this.pipeline,
       final List<ModuleState> modules = const [],
-      this.selected})
+      this.selected,
+      this.refreshIndex = 0})
       : _modules = modules;
 
   @override
@@ -143,10 +161,13 @@ class _$PipelineHomeStateImpl implements _PipelineHomeState {
 // 当前默认选中的module
   @override
   final ModuleState? selected;
+  @override
+  @JsonKey()
+  final int refreshIndex;
 
   @override
   String toString() {
-    return 'PipelineHomeState(pipeline: $pipeline, modules: $modules, selected: $selected)';
+    return 'PipelineHomeState(pipeline: $pipeline, modules: $modules, selected: $selected, refreshIndex: $refreshIndex)';
   }
 
   @override
@@ -158,12 +179,14 @@ class _$PipelineHomeStateImpl implements _PipelineHomeState {
                 other.pipeline == pipeline) &&
             const DeepCollectionEquality().equals(other._modules, _modules) &&
             (identical(other.selected, selected) ||
-                other.selected == selected));
+                other.selected == selected) &&
+            (identical(other.refreshIndex, refreshIndex) ||
+                other.refreshIndex == refreshIndex));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, pipeline,
-      const DeepCollectionEquality().hash(_modules), selected);
+      const DeepCollectionEquality().hash(_modules), selected, refreshIndex);
 
   /// Create a copy of PipelineHomeState
   /// with the given fields replaced by the non-null parameter values.
@@ -179,7 +202,8 @@ abstract class _PipelineHomeState implements PipelineHomeState {
   const factory _PipelineHomeState(
       {final Pipeline? pipeline,
       final List<ModuleState> modules,
-      final ModuleState? selected}) = _$PipelineHomeStateImpl;
+      final ModuleState? selected,
+      final int refreshIndex}) = _$PipelineHomeStateImpl;
 
   @override
   Pipeline? get pipeline;
@@ -187,6 +211,8 @@ abstract class _PipelineHomeState implements PipelineHomeState {
   List<ModuleState> get modules; // 当前默认选中的module
   @override
   ModuleState? get selected;
+  @override
+  int get refreshIndex;
 
   /// Create a copy of PipelineHomeState
   /// with the given fields replaced by the non-null parameter values.

@@ -10,6 +10,7 @@ class PipelineHomeState with _$PipelineHomeState {
     @Default([]) List<ModuleState> modules,
     // 当前默认选中的module
     ModuleState? selected,
+    @Default(0) int refreshIndex,
   }) = _PipelineHomeState;
 }
 

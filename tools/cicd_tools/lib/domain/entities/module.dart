@@ -7,5 +7,7 @@ class ModuleEntity with GitAction {
   final RepoEntity repo;
   final String moduleName;
 
+  String targetBranch = 'develop';
+
   ModuleEntity({required this.repo, required this.moduleName});
 }

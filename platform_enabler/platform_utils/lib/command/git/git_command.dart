@@ -243,9 +243,15 @@ class GitRemoteQueryAllBranch extends GitCMD<List<String>> {
           .where((line) => line.isNotEmpty) // 过滤掉空行
           .map((line) {
         // 处理分支名称
-        if (line.startsWith('*')) {
-          return line.substring(1).trim(); // 去掉当前分支的 '*' 符号
+        var split = line.split('/');
+        if (split.length >= 2) {
+          String temp = split[2];
+          for (int i = 3; i < split.length; i++) {
+            temp = '$temp/${split[i]}';
+          }
+          return temp;
         }
+
         return line;
       }).toList();
 
