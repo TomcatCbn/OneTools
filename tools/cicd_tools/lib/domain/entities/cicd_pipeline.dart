@@ -1,5 +1,10 @@
+import 'dart:io';
+
 import 'package:cicd_tools/domain/entities/cicd_errors.dart';
 import 'package:cicd_tools/domain/entities/cicd_stage.dart';
+import 'package:cicd_tools/domain/entities/stage_config.dart';
+import 'package:cicd_tools/plugin/cicd_tools_plugins.dart';
+import 'package:flutter/foundation.dart';
 import 'package:platform_utils/log/platform_logger.dart';
 import 'package:platform_utils/platform_command.dart';
 import 'package:platform_utils/platform_stream_enhance.dart';
@@ -10,8 +15,22 @@ class Pipeline with Runnable {
   // 要执行的所有stage
   final List<CICDStage> stages;
   final String pipelineName;
+  final Map<String, Object> initialArgs = {};
 
-  Pipeline({required this.stages, required this.pipelineName});
+  Pipeline(
+      {required this.stages,
+      required this.pipelineName,
+      Map<String, Object> args = const <String, Object>{}}) {
+    initialArgs.addAll(args);
+    // 设置工作空间
+    String workDir = '${CICDTools().workDirName}/pipelines/$pipelineName';
+    initialArgs[CONFIG_PIPELINE_WORKSPACE] = workDir;
+    // 清理下空间
+    final dir = Directory(workDir);
+    if (dir.existsSync()) {
+      dir.deleteSync(recursive: true);
+    }
+  }
 
   Stream<PipelineEvent> get pipelineEvent => _eventController.stream;
 
@@ -24,7 +43,11 @@ class Pipeline with Runnable {
     Logger.d(msg: '-------- begin pipeline $pipelineName---------------');
     CICDError? error;
     Map<String, Object> argsL = {};
+    // 添加外部启动配置
     argsL.addAll(args);
+    // 添加初始化的配置
+    argsL.addAll(initialArgs);
+
     for (CICDStage stage in stages) {
       try {
         Logger.d(msg: '----------- Stage: ${stage.nameId} ---------------');
@@ -57,4 +80,9 @@ class StageChangedEvent extends PipelineEvent {
   final CICDStage stage;
 
   StageChangedEvent({required this.stage});
+
+  @override
+  String toString() {
+    return 'StageChangedEvent{stage: $stage}';
+  }
 }

@@ -18,24 +18,38 @@ const String _gitCMDPush = 'push';
 const String _gitCMDConfig = 'config';
 const String _gitRemoteCMD = 'ls-remote';
 
-abstract class GitCMD<R> extends ShellCommand<R> {
+sealed class GitCMD<R> extends ShellCommand<R> {
   GitCMD({required super.workDir});
 }
 
 class GitClone extends GitCMD<bool> {
   final String repoUrl;
+  final String branch;
+  final String dirName;
 
-  GitClone({required super.workDir, required this.repoUrl});
+  GitClone(
+      {required super.workDir,
+      required this.repoUrl,
+      this.branch = '',
+      this.dirName = ''});
 
   @override
   Future<Either<E, bool>> run<E extends ToolsError>() async {
-    Logger.d(msg: 'run git clone, $repoUrl, $workDir', tag: _tag);
+    Logger.d(
+        msg: 'run git clone, $repoUrl, branch = $branch, workDir = $workDir',
+        tag: _tag);
     if (repoUrl.isEmpty) {
       return Left(CommonError.paramsInvalid() as E);
     }
 
-    var eitherRes =
-        await ShellUtils.execCMD([_gitCMD, _gitCMDClone, repoUrl], workDir);
+    if (!workDir.existsSync()) {
+      workDir.createSync(recursive: true);
+    }
+
+    var eitherRes = await (branch.isEmpty
+        ? ShellUtils.execCMD([_gitCMD, _gitCMDClone, repoUrl, dirName], workDir)
+        : ShellUtils.execCMD(
+            [_gitCMD, _gitCMDClone, '-b', branch, repoUrl, dirName], workDir));
     return eitherRes.fold(
         ifLeft: (l) => Either.left(l as E),
         ifRight: (r) => Either.right(r.isSuccess));

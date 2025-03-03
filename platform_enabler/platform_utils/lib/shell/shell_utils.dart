@@ -34,10 +34,11 @@ class ShellUtils {
 
   static Future<Either<ShellError, ProcessExecResult>> execCMD(
     List<String> commandLine,
-    Directory workingDirectory,
-  ) async {
+    Directory workingDirectory, {
+    Map<String, String>? environment,
+  }) async {
     Logger.d(msg: 'run shell cmd, $commandLine', tag: tag);
-    ProcessRunner processRunner = ProcessRunner();
+    ProcessRunner processRunner = ProcessRunner(environment: environment);
     ProcessRunnerResult result = await processRunner.runProcess(
       commandLine,
       workingDirectory: workingDirectory,

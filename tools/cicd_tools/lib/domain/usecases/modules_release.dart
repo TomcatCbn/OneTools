@@ -1,5 +1,6 @@
 import 'package:cicd_tools/cicd_tools.dart';
 import 'package:cicd_tools/domain/entities/cicd_stage.dart';
+import 'package:cicd_tools/domain/entities/stage_config.dart';
 import 'package:platform_utils/platform_logger.dart';
 
 import '../entities/cicd_pipeline.dart';
@@ -37,20 +38,27 @@ class ModuleReleaseUseCase {
   }
 
   Pipeline? _doCreateAndroidModulePipeline(ModuleEntity entity) {
-    var codeFetchStage = CodeFetchStage(modules: [entity]);
+    var codeFetchStage = CodeFetchStage();
     var releaseStage = AndroidPackageReleaseState();
     final p = Pipeline(
         stages: [codeFetchStage, releaseStage],
-        pipelineName: 'Android AAR Release');
+        pipelineName: 'Android-AAR-Release',
+        args: {
+          CONFIG_MODULES: {entity.moduleName: entity}
+        });
+
     return p;
   }
 
   Pipeline? _doCreateIOSModulePipeline(ModuleEntity entity) {
-    var codeFetchStage = CodeFetchStage(modules: [entity]);
+    var codeFetchStage = CodeFetchStage();
     var releaseStage = IOSPackageReleaseState();
     final p = Pipeline(
         stages: [codeFetchStage, releaseStage],
-        pipelineName: 'iOS Pod Release');
+        pipelineName: 'iOS-Pod-Release',
+        args: {
+          CONFIG_MODULES: {entity.moduleName: entity}
+        });
     return p;
   }
 }

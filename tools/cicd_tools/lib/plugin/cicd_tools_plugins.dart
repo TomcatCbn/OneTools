@@ -22,7 +22,7 @@ class CICDTools implements PlatformPlugin, PlatformPluginLifeCycleListener {
   String get pluginId => 'cicd_tools';
 
   @override
-  String get workDirName => 'cicd_tools_plugin';
+  String get workDirName => '${settings.workSpace}/cicd_tools_plugin';
 
   @override
   Map<String, WidgetBuilder> get routes => {
