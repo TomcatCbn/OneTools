@@ -21,6 +21,7 @@ mixin _$PipelineHomeState {
       throw _privateConstructorUsedError; // 当前默认选中的module
   ModuleState? get selected => throw _privateConstructorUsedError;
   int get refreshIndex => throw _privateConstructorUsedError;
+  BtnState get pipelineBtnState => throw _privateConstructorUsedError;
 
   /// Create a copy of PipelineHomeState
   /// with the given fields replaced by the non-null parameter values.
@@ -39,7 +40,8 @@ abstract class $PipelineHomeStateCopyWith<$Res> {
       {Pipeline? pipeline,
       List<ModuleState> modules,
       ModuleState? selected,
-      int refreshIndex});
+      int refreshIndex,
+      BtnState pipelineBtnState});
 }
 
 /// @nodoc
@@ -61,6 +63,7 @@ class _$PipelineHomeStateCopyWithImpl<$Res, $Val extends PipelineHomeState>
     Object? modules = null,
     Object? selected = freezed,
     Object? refreshIndex = null,
+    Object? pipelineBtnState = null,
   }) {
     return _then(_value.copyWith(
       pipeline: freezed == pipeline
@@ -79,6 +82,10 @@ class _$PipelineHomeStateCopyWithImpl<$Res, $Val extends PipelineHomeState>
           ? _value.refreshIndex
           : refreshIndex // ignore: cast_nullable_to_non_nullable
               as int,
+      pipelineBtnState: null == pipelineBtnState
+          ? _value.pipelineBtnState
+          : pipelineBtnState // ignore: cast_nullable_to_non_nullable
+              as BtnState,
     ) as $Val);
   }
 }
@@ -95,7 +102,8 @@ abstract class _$$PipelineHomeStateImplCopyWith<$Res>
       {Pipeline? pipeline,
       List<ModuleState> modules,
       ModuleState? selected,
-      int refreshIndex});
+      int refreshIndex,
+      BtnState pipelineBtnState});
 }
 
 /// @nodoc
@@ -115,6 +123,7 @@ class __$$PipelineHomeStateImplCopyWithImpl<$Res>
     Object? modules = null,
     Object? selected = freezed,
     Object? refreshIndex = null,
+    Object? pipelineBtnState = null,
   }) {
     return _then(_$PipelineHomeStateImpl(
       pipeline: freezed == pipeline
@@ -133,6 +142,10 @@ class __$$PipelineHomeStateImplCopyWithImpl<$Res>
           ? _value.refreshIndex
           : refreshIndex // ignore: cast_nullable_to_non_nullable
               as int,
+      pipelineBtnState: null == pipelineBtnState
+          ? _value.pipelineBtnState
+          : pipelineBtnState // ignore: cast_nullable_to_non_nullable
+              as BtnState,
     ));
   }
 }
@@ -144,7 +157,8 @@ class _$PipelineHomeStateImpl implements _PipelineHomeState {
       {this.pipeline,
       final List<ModuleState> modules = const [],
       this.selected,
-      this.refreshIndex = 0})
+      this.refreshIndex = 0,
+      this.pipelineBtnState = BtnState.disable})
       : _modules = modules;
 
   @override
@@ -164,10 +178,13 @@ class _$PipelineHomeStateImpl implements _PipelineHomeState {
   @override
   @JsonKey()
   final int refreshIndex;
+  @override
+  @JsonKey()
+  final BtnState pipelineBtnState;
 
   @override
   String toString() {
-    return 'PipelineHomeState(pipeline: $pipeline, modules: $modules, selected: $selected, refreshIndex: $refreshIndex)';
+    return 'PipelineHomeState(pipeline: $pipeline, modules: $modules, selected: $selected, refreshIndex: $refreshIndex, pipelineBtnState: $pipelineBtnState)';
   }
 
   @override
@@ -181,12 +198,19 @@ class _$PipelineHomeStateImpl implements _PipelineHomeState {
             (identical(other.selected, selected) ||
                 other.selected == selected) &&
             (identical(other.refreshIndex, refreshIndex) ||
-                other.refreshIndex == refreshIndex));
+                other.refreshIndex == refreshIndex) &&
+            (identical(other.pipelineBtnState, pipelineBtnState) ||
+                other.pipelineBtnState == pipelineBtnState));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, pipeline,
-      const DeepCollectionEquality().hash(_modules), selected, refreshIndex);
+  int get hashCode => Object.hash(
+      runtimeType,
+      pipeline,
+      const DeepCollectionEquality().hash(_modules),
+      selected,
+      refreshIndex,
+      pipelineBtnState);
 
   /// Create a copy of PipelineHomeState
   /// with the given fields replaced by the non-null parameter values.
@@ -203,7 +227,8 @@ abstract class _PipelineHomeState implements PipelineHomeState {
       {final Pipeline? pipeline,
       final List<ModuleState> modules,
       final ModuleState? selected,
-      final int refreshIndex}) = _$PipelineHomeStateImpl;
+      final int refreshIndex,
+      final BtnState pipelineBtnState}) = _$PipelineHomeStateImpl;
 
   @override
   Pipeline? get pipeline;
@@ -213,6 +238,8 @@ abstract class _PipelineHomeState implements PipelineHomeState {
   ModuleState? get selected;
   @override
   int get refreshIndex;
+  @override
+  BtnState get pipelineBtnState;
 
   /// Create a copy of PipelineHomeState
   /// with the given fields replaced by the non-null parameter values.

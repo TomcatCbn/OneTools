@@ -55,7 +55,7 @@ class _BodyWidget extends StatelessWidget {
               child: Text(pipeline.name));
         },
         separatorBuilder: (context, index) {
-          return Divider();
+          return const Divider();
         },
         itemCount: state.pipelines.length);
   }

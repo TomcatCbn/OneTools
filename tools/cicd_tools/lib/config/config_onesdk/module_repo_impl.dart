@@ -5,14 +5,27 @@ class ModuleRepoImpl extends ModuleRepo {
   Map<String, ModuleEntity> modules = {};
 
   ModuleRepoImpl() {
-    var moduleEntity1 = ModuleEntity(
+    // ---------------- tools ----------------
+    var cliTools = ModuleEntity(
+        repo: RepoEntity(
+            repoUrl:
+            'git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/cli-tools.git',
+            path: 'cli-tools'),
+        moduleName: 'cli-tools');
+
+    modules[cliTools.moduleName] = cliTools;
+
+    // ---------------- android --------------
+    var xpBaseTools = ModuleEntity(
         repo: RepoEntity(
             repoUrl:
                 'git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/xpbasetools.git',
-            path: 'xpbasetools'),
+            path: 'VWBaseTools'),
         moduleName: 'android.xpbasetools');
+    // 添加dependency
+    xpBaseTools.dependencyModules.add(cliTools.moduleName);
+    modules[xpBaseTools.moduleName] = xpBaseTools;
 
-    modules[moduleEntity1.moduleName] = moduleEntity1;
   }
 
   @override
@@ -24,4 +37,8 @@ class ModuleRepoImpl extends ModuleRepo {
   List<ModuleEntity> loadAll() {
     return modules.values.toList(growable: false);
   }
-}
+
+  @override
+  Map<String, ModuleEntity> loadAllAsMap() {
+    return modules;
+  }}

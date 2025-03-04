@@ -9,6 +9,7 @@ import 'home/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Logger.init('${settings.workSpace}/logs');
   var codeTools = CodeTools();
   var cicdTools = CICDTools();
   // register lifecycle listener

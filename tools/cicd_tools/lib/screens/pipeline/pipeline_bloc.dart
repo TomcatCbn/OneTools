@@ -9,19 +9,21 @@ import 'package:flutter/material.dart';
 import 'package:platform_utils/platform_utils.dart';
 
 import '../../config/config_onesdk/module_repo_impl.dart';
+import '../../domain/entities/cicd_pipeline.dart';
 import '../../domain/usecases/modules_release.dart';
 
 class PipelineHomeBloc extends BaseBloc<PipelineHomeEvent, PipelineHomeState> {
   final Directory workDir;
   final String pipelineName;
 
-  final ModuleReleaseUseCase _useCase =
-      ModuleReleaseUseCase(repo: ModuleRepoImpl());
+  final PipelineUseCase _useCase;
 
   final Map<String, ModuleEntity> _allModules = {};
 
   PipelineHomeBloc({required this.workDir, required this.pipelineName})
-      : super(const PipelineHomeState()) {
+      : _useCase =
+            PipelineUseCase(repo: ModuleRepoImpl(), pipelineName: pipelineName),
+        super(const PipelineHomeState()) {
     on<PipelineInitEvent>(_onInitHomeEvent);
     on<ModuleSelectEvent>(_onModuleSelectEvent);
     on<BranchSelectEvent>(_onBranchSelectEvent);
@@ -73,7 +75,8 @@ class PipelineHomeBloc extends BaseBloc<PipelineHomeEvent, PipelineHomeState> {
       ..addAll(branches);
     event.moduleState!.selectBranch = branches.first;
 
-    emit(state.copyWith(selected: event.moduleState));
+    emit(state.copyWith(
+        selected: event.moduleState, pipelineBtnState: BtnState.enable));
   }
 
   FutureOr<void> _onBranchSelectEvent(
@@ -108,8 +111,16 @@ class PipelineHomeBloc extends BaseBloc<PipelineHomeEvent, PipelineHomeState> {
       toastHelper.showToast(msg: '创建pipeline失败');
       return;
     }
+    emit(state.copyWith(pipelineBtnState: BtnState.inProgress));
+    // 开始监听pipeline事件
+    pipeline.pipelineEvent.listen((onData) {
+      if (onData is StageChangedEvent) {
+        toastHelper.showLoading(msg: 'Running ${onData.stage.nameId}');
+      }
+    });
 
     var either = await pipeline.run({});
+    toastHelper.dismissLoading();
     either.fold(ifLeft: (e) {
       toastHelper.showToast(msg: 'pipeline运行失败');
     }, ifRight: (v) {

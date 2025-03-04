@@ -11,6 +11,7 @@ class PipelineHomeState with _$PipelineHomeState {
     // 当前默认选中的module
     ModuleState? selected,
     @Default(0) int refreshIndex,
+    @Default(BtnState.disable) BtnState pipelineBtnState,
   }) = _PipelineHomeState;
 }
 
@@ -21,4 +22,10 @@ class ModuleState {
   String selectBranch = '';
 
   ModuleState({required this.moduleName});
+}
+
+enum BtnState {
+  enable,
+  inProgress,
+  disable,
 }

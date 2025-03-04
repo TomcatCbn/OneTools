@@ -24,14 +24,53 @@ abstract class CICDStage {
   }
 }
 
-/// 确认模块依赖关系
+/// 确认模块依赖关系, 并处理
 class DependencyCheckStage extends CICDStage {
   DependencyCheckStage() : super(nameId: 'DependencyCheckStage');
 
   @override
-  Future<Either<CICDError, Map<String, Object>>> run(Map<String, Object> args) {
-    // TODO: implement run
-    throw UnimplementedError();
+  Future<Either<CICDError, Map<String, Object>>> run(
+      Map<String, Object> args) async {
+    if (!args.containsKey(CONFIG_OPERATE_MODULES)) {
+      Logger.e(msg: '未选中任何Module');
+      return Either.left(CICDRuntimeError('module empty'));
+    }
+
+    final modules = args[CONFIG_OPERATE_MODULES] as Map<String, ModuleEntity>;
+    // 工作目录
+    final String workDir = args[CONFIG_PIPELINE_WORKSPACE] as String;
+    Logger.i(msg: '$nameId, 一共${modules.length}个模块');
+    // 处理依赖关系
+    final Map<String, ModuleEntity> allModules =
+        args[CONFIG_ALL_MODULES] as Map<String, ModuleEntity>;
+    List<List<ModuleEntity>> deps = modules.values.map((e) {
+      return e.dependencyModules.map((d) {
+        final m = allModules[d] as ModuleEntity;
+        return m;
+      }).toList(growable: false);
+    }).toList();
+    var tasks = deps
+        .expand((list) => list)
+        .map((e) => _createCloneTask(e, e.targetBranch, workDir))
+        .toList(growable: false);
+    try {
+      await Future.wait(tasks);
+    } catch (e) {
+      return Either.left(CICDUnImplementError());
+    }
+
+    return Either.right(args);
+  }
+
+  Future<Either<ToolsError, bool>> _createCloneTask(
+      ModuleEntity entity, String branch, String workDir) async {
+    var gitClone = GitClone(
+      workDir: Directory(workDir),
+      repoUrl: entity.repo.repoUrl,
+      branch: branch,
+      dirName: entity.moduleName,
+    );
+    return gitClone.run();
   }
 }
 
@@ -43,11 +82,11 @@ class CodeFetchStage extends CICDStage {
   @override
   Future<Either<CICDError, Map<String, Object>>> run(
       Map<String, Object> args) async {
-    if (!args.containsKey(CONFIG_MODULES)) {
+    if (!args.containsKey(CONFIG_OPERATE_MODULES)) {
       Logger.e(msg: '未选中任何Module');
       return Either.left(CICDRuntimeError('module empty'));
     }
-    final modules = args[CONFIG_MODULES] as Map<String, ModuleEntity>;
+    final modules = args[CONFIG_OPERATE_MODULES] as Map<String, ModuleEntity>;
     // 工作目录
     final String workDir = args[CONFIG_PIPELINE_WORKSPACE] as String;
     Logger.i(msg: '$nameId, 一共${modules.length}个模块');
@@ -108,7 +147,7 @@ class AndroidPackageReleaseState extends CICDStage with GradleAction {
   Future<Either<CICDError, Map<String, Object>>> run(
       Map<String, Object> args) async {
     // 获取module
-    var modules = args[CONFIG_MODULES] as Map<String, ModuleEntity>;
+    var modules = args[CONFIG_OPERATE_MODULES] as Map<String, ModuleEntity>;
     if (modules.isEmpty) {
       return Either.right(args);
     }
@@ -120,7 +159,14 @@ class AndroidPackageReleaseState extends CICDStage with GradleAction {
         .map((e) => _createGradleTask(e, '$workDir/${e.moduleName}'))
         .toList(growable: false);
     try {
-      await Future.wait(list);
+      var results = await Future.wait(list);
+      try {
+        var error = results.firstWhere((r) => r.isLeft);
+        return Either.left(
+            CICDRuntimeError((error as Left<CICDError, void>).value.msg));
+      } catch (e) {
+        // ignore
+      }
     } catch (e) {
       Logger.e(msg: '$nameId, failed, $e');
       return Either.left(CICDRuntimeError(e.toString()));

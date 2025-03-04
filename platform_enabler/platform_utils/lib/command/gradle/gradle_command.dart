@@ -25,7 +25,7 @@ class ArtifactoryPublishCMD extends GradleCMD<bool> {
     await ShellUtils.execCMD(['java', '--version'], workDir);
     // ./gradlew :moduleName:artifactoryPublish
     var either = await ShellUtils.execCMD(
-        [_gradleCMD, ':$moduleName:$_publishLocalCMD'], workDir);
+        [_gradleCMD, ':$moduleName:$_jfrogUploadCMD'], workDir);
 
     return either.fold(
         ifLeft: (l) => Left(l as E), ifRight: (r) => Right(r.isSuccess));

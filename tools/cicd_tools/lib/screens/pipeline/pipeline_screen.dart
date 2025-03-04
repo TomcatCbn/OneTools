@@ -55,20 +55,36 @@ class _BodyWidget extends StatelessWidget {
         // 模块
         const Text('模块选择'),
         _buildModuleSelector(context, state.modules, state.selected),
+
+        const SizedBox(height: 20),
+
         // 分支
         const Text('分支选择'),
         _buildBranchSelector(context, state.selected),
         // tag
-
+        const SizedBox(height: 20),
         // 启动
         ElevatedButton(
-          onPressed: () {
-            context.read<PipelineHomeBloc>().add(PipelineStartEvent());
-          },
-          child: const Text('启动Pipeline'),
+          onPressed: state.pipelineBtnState == BtnState.enable
+              ? () {
+                  context.read<PipelineHomeBloc>().add(PipelineStartEvent());
+                }
+              : null,
+          child: Text(_getPipelineBtnString(state.pipelineBtnState)),
         )
       ],
     );
+  }
+
+  String _getPipelineBtnString(BtnState btnState) {
+    switch (btnState) {
+      case BtnState.enable:
+        return '启动Pipeline';
+      case BtnState.inProgress:
+        return '进行中';
+      case BtnState.disable:
+        return '未就绪';
+    }
   }
 
   Widget _buildModuleSelector(

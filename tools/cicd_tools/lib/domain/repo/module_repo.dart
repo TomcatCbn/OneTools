@@ -6,4 +6,6 @@ abstract class ModuleRepo {
 
   /// 返回所有配置的Module
   List<ModuleEntity> loadAll();
+
+  Map<String, ModuleEntity> loadAllAsMap();
 }

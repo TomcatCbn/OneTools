@@ -4,10 +4,10 @@ import 'package:cicd_tools/domain/entities/cicd_errors.dart';
 import 'package:cicd_tools/domain/entities/cicd_stage.dart';
 import 'package:cicd_tools/domain/entities/stage_config.dart';
 import 'package:cicd_tools/plugin/cicd_tools_plugins.dart';
-import 'package:flutter/foundation.dart';
 import 'package:platform_utils/log/platform_logger.dart';
 import 'package:platform_utils/platform_command.dart';
 import 'package:platform_utils/platform_stream_enhance.dart';
+import 'package:platform_utils/platform_utils.dart';
 
 import 'cicd_action.dart';
 
@@ -67,7 +67,13 @@ class Pipeline with Runnable {
     Logger.d(msg: '----------- end pipeline $pipelineName ---------------');
     Logger.d(msg: '--------- ${error != null ? 'failed' : 'success'}---------');
 
+
     if (error == null) {
+      // 关闭file log
+      Future.delayed(const Duration(seconds: 3)).then((onValue) {
+        Logger.closeFileWrite();
+      });
+
       return Either.right(argsL);
     }
     return Either.left(error);

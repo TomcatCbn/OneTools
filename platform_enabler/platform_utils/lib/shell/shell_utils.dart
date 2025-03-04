@@ -17,8 +17,13 @@ class ShellUtils {
       ProcessRunner processRunner = ProcessRunner();
       ProcessRunnerResult result = await processRunner.runProcess(
         [command, '--version'],
-        printOutput: true,
+        printOutput: false,
       );
+
+      Logger.i(msg: 'stdout: ${result.stdout}', tag: tag);
+      if (result.stderr.isNotEmpty) {
+        Logger.e(msg: 'Stderr: ${result.stderr}', tag: tag);
+      }
 
       if (result.exitCode == 0) {
         return true;
@@ -42,11 +47,15 @@ class ShellUtils {
     ProcessRunnerResult result = await processRunner.runProcess(
       commandLine,
       workingDirectory: workingDirectory,
-      printOutput: true,
+      printOutput: false,
     );
     // ProcessResult result = await Process.run(
     //     commandLine.first, commandLine.sublist(1),
     //     workingDirectory: workingDirectory.path);
+    Logger.i(msg: 'Stdout: ${result.stdout}', tag: tag);
+    if (result.stderr.isNotEmpty) {
+      Logger.e(msg: 'Stderr: ${result.stderr}', tag: tag);
+    }
 
     if (result.exitCode == 0) {
       Logger.d(msg: 'run shell cmd success, $commandLine', tag: tag);

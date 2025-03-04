@@ -1,4 +1,6 @@
 import 'package:bot_toast/bot_toast.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:platform_utils/platform_utils.dart';
 
 class ToastImpl implements IToast {
@@ -14,7 +16,23 @@ class ToastImpl implements IToast {
     if (loading != null) {
       loading?.call();
     }
-    loading = BotToast.showLoading();
+    loading = BotToast.showCustomLoading(toastBuilder: (builder) {
+      return Container(
+        padding: const EdgeInsets.all(15),
+        decoration: const BoxDecoration(
+            color: Colors.black54,
+            borderRadius: BorderRadius.all(Radius.circular(8))),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const CircularProgressIndicator(
+              backgroundColor: Colors.white,
+            ),
+            Text(msg),
+          ],
+        ),
+      );
+    });
   }
 
   @override

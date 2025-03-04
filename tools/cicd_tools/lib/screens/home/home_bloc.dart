@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cicd_tools/screens/pipeline/pipeline_screen.dart';
+import 'package:cicd_tools/screens/widgets/login_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:platform_utils/platform_utils.dart';
 
@@ -44,11 +45,17 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
   }
 
   FutureOr<void> _onHomeClickPipelineEvent(
-      HomeClickPipelineEvent event, Emitter<HomeState> emit) {
+      HomeClickPipelineEvent event, Emitter<HomeState> emit) async {
     var pipeline = state.pipelines[event.index];
+    // 检查操作员
+    var bool = await showUserInfoDialog(event.context);
+    if (!bool) {
+      toastHelper.showToast(msg: '请核对账号');
+      return;
+    }
 
     Navigator.push(
-      event.context,
+      navigatorKey.currentContext!,
       MaterialPageRoute(builder: (BuildContext context) {
         return PipelineHomeScreen(
           workDir: workDir,
@@ -56,5 +63,11 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
         );
       }),
     );
+  }
+
+  Future<bool> showUserInfoDialog(BuildContext context) async {
+    bool? res = await showDialog(
+        context: context, builder: (context) => const LoginDialog());
+    return res ?? false;
   }
 }

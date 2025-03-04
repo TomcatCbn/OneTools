@@ -4,6 +4,7 @@ import 'package:platform_plugins/platform_plugins.dart';
 import 'package:platform_plugins/platform_plugins_mgmt.dart';
 import 'package:platform_utils/platform_utils.dart';
 import 'package:platform_utils/platform_screenutils.dart';
+import 'package:platform_utils/platform_widget_ex.dart';
 
 class OneToolsApp extends StatelessWidget {
   const OneToolsApp({super.key});
@@ -75,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       onPressed: () {
                         Navigator.pushNamed(context, p.homeRoute);
                       },
-                    ))
+                    ).addPadding(EdgeInsets.symmetric(vertical: 20.sp)))
               ],
             ),
           ),
