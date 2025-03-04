@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:cicd_tools/domain/entities/cicd_pipeline.dart';
 import 'package:cicd_tools/screens/pipeline/pipeline_screen.dart';
 import 'package:cicd_tools/screens/widgets/login_widget.dart';
 import 'package:flutter/material.dart';
@@ -21,14 +22,20 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
       HomeInitEvent event, Emitter<HomeState> emit) async {
     toastHelper.showLoading();
 
-    PipelineState applicationAndroidP = PipelineState(name: 'Android应用发布');
-    PipelineState applicationIOSP = PipelineState(name: 'iOS应用发布');
-    PipelineState publishAndroidModule =
-        PipelineState(name: 'Android Module 发布');
-    PipelineState publishIOSModule = PipelineState(name: 'iOS Module 发布');
-    PipelineState checkIOSModule = PipelineState(name: 'Check Android Module');
-    PipelineState checkAndroidModule = PipelineState(name: 'Check iOS Module');
-    PipelineState repoMerge = PipelineState(name: '仓库分支Merge');
+    PipelineState applicationAndroidP =
+        PipelineState(name: 'Android应用发布', pipelineType: PipelineType.apk);
+    PipelineState applicationIOSP =
+        PipelineState(name: 'iOS应用发布', pipelineType: PipelineType.ipa);
+    PipelineState publishAndroidModule = PipelineState(
+        name: 'Android Module 发布', pipelineType: PipelineType.aar);
+    PipelineState publishIOSModule =
+        PipelineState(name: 'iOS Module 发布', pipelineType: PipelineType.pod);
+    PipelineState checkAndroidModule = PipelineState(
+        name: 'Check Android Module',
+        pipelineType: PipelineType.androidCheckModule);
+    PipelineState checkIOSModule = PipelineState(
+        name: 'Check iOS Module', pipelineType: PipelineType.iosCheckModule);
+    // PipelineState repoMerge = PipelineState(name: '仓库分支Merge');
 
     List<PipelineState> list = [];
     list.add(applicationAndroidP);
@@ -36,9 +43,8 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
     list.add(publishAndroidModule);
     list.add(publishIOSModule);
     list.add(checkIOSModule);
-    list.add(checkIOSModule);
     list.add(checkAndroidModule);
-    list.add(repoMerge);
+    // list.add(repoMerge);
 
     emit(state.copyWith(pipelines: list));
     toastHelper.dismissLoading();
@@ -60,6 +66,7 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
         return PipelineHomeScreen(
           workDir: workDir,
           pipelineName: pipeline.name,
+          pipelineType: pipeline.pipelineType,
         );
       }),
     );

@@ -39,6 +39,15 @@ class Logger {
     _logSink?.write(t);
   }
 
+  static void w({String msg = '', String tag = 'DEFAULT'}) {
+    final t = '[WARN][$tag] $msg';
+    if (logConsole) {
+      _logger.d(t);
+    }
+    _backup?.write(t);
+    _logSink?.write(t);
+  }
+
   static void e({String msg = '', String tag = 'DEFAULT'}) {
     final t = '[ERROR][$tag] $msg';
     if (logConsole) {

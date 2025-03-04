@@ -26,6 +26,16 @@ class ModuleRepoImpl extends ModuleRepo {
     xpBaseTools.dependencyModules.add(cliTools.moduleName);
     modules[xpBaseTools.moduleName] = xpBaseTools;
 
+    var apps = ModuleEntity(
+        repo: RepoEntity(
+            repoUrl:
+            'git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/apps.git',
+            path: 'vwapptest'),
+        moduleName: 'android.apps');
+    // 添加dependency
+    apps.dependencyModules.add(cliTools.moduleName);
+    modules[apps.moduleName] = apps;
+
   }
 
   @override

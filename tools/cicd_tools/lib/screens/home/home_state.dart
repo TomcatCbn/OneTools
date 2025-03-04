@@ -1,5 +1,7 @@
 import 'package:platform_utils/platform_utils.dart';
 
+import '../../domain/entities/cicd_pipeline.dart';
+
 part 'home_state.freezed.dart';
 
 @freezed
@@ -10,6 +12,7 @@ class HomeState with _$HomeState {
 
 class PipelineState {
   final String name;
+  final PipelineType pipelineType;
 
-  PipelineState({required this.name});
+  PipelineState({required this.name, required this.pipelineType});
 }

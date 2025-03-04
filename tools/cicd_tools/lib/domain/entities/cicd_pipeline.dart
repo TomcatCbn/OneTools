@@ -69,11 +69,6 @@ class Pipeline with Runnable {
 
 
     if (error == null) {
-      // 关闭file log
-      Future.delayed(const Duration(seconds: 3)).then((onValue) {
-        Logger.closeFileWrite();
-      });
-
       return Either.right(argsL);
     }
     return Either.left(error);
@@ -90,5 +85,38 @@ class StageChangedEvent extends PipelineEvent {
   @override
   String toString() {
     return 'StageChangedEvent{stage: $stage}';
+  }
+}
+
+enum PipelineType {
+  aar,
+  pod,
+  apk,
+  ipa,
+  androidCheckModule,
+  iosCheckModule,
+}
+
+// 为 PipelineType 枚举添加扩展
+extension PipelineTypeExtension on String {
+  // 扩展方法，用于将字符串转换为 PipelineType 枚举值
+  PipelineType toPipelineType() {
+    switch (this) {
+      case 'aar':
+        return PipelineType.aar;
+      case 'pod':
+        return PipelineType.pod;
+      case 'apk':
+        return PipelineType.apk;
+      case 'ipa':
+        return PipelineType.ipa;
+      case 'androidCheckModule':
+        return PipelineType.androidCheckModule;
+      case 'iosCheckModule':
+        return PipelineType.iosCheckModule;
+      default:
+      // 当传入的字符串无法匹配时，抛出异常
+        throw ArgumentError('Invalid string for PipelineType: $this');
+    }
   }
 }

@@ -22,7 +22,7 @@ class ShellUtils {
 
       Logger.i(msg: 'stdout: ${result.stdout}', tag: tag);
       if (result.stderr.isNotEmpty) {
-        Logger.e(msg: 'Stderr: ${result.stderr}', tag: tag);
+        Logger.w(msg: 'Stderr: ${result.stderr}', tag: tag);
       }
 
       if (result.exitCode == 0) {
@@ -54,7 +54,7 @@ class ShellUtils {
     //     workingDirectory: workingDirectory.path);
     Logger.i(msg: 'Stdout: ${result.stdout}', tag: tag);
     if (result.stderr.isNotEmpty) {
-      Logger.e(msg: 'Stderr: ${result.stderr}', tag: tag);
+      Logger.w(msg: 'Stderr: ${result.stderr}', tag: tag);
     }
 
     if (result.exitCode == 0) {

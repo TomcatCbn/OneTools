@@ -15,6 +15,13 @@ class ModuleSelectEvent extends PipelineHomeEvent {
   ModuleSelectEvent({required this.moduleState});
 }
 
+/// module关键字变更
+class ModuleKeyWordChangedEvent extends PipelineHomeEvent {
+  final String keyWord;
+
+  ModuleKeyWordChangedEvent({required this.keyWord});
+}
+
 /// 选择了module
 class BranchSelectEvent extends PipelineHomeEvent {
   final String? branch;

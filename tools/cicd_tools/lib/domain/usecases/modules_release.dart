@@ -6,7 +6,6 @@ import 'package:platform_utils/platform_utils.dart';
 
 import '../../plugin/cicd_tools_plugins.dart';
 import '../entities/cicd_pipeline.dart';
-import '../entities/publish_type.dart';
 
 class PipelineUseCase {
   final ModuleRepo repo;
@@ -21,23 +20,40 @@ class PipelineUseCase {
     Logger.logToNewFile(filePath: filePath);
   }
 
-  Pipeline? createPipeline(PublishType type, ModuleEntity entity,
+  void release() {
+    // 关闭file log
+    Future.delayed(const Duration(seconds: 3)).then((onValue) {
+      Logger.closeFileWrite();
+    });
+  }
+
+  Pipeline? createPipeline(String pipelineType, ModuleEntity entity,
       {required String branch}) {
-    Logger.i(msg: 'createPipeline, $type, ${entity.moduleName}, $branch');
+    Logger.i(
+        msg:
+            'createPipeline, $pipelineName, $pipelineType, ${entity.moduleName}, $branch');
     // 设置目标分支
     entity.targetBranch = branch;
     Pipeline? pipeline;
-    switch (type) {
-      case PublishType.apk:
-        break;
-      case PublishType.ipa:
-        break;
-      case PublishType.aar:
+    switch (pipelineType.toPipelineType()) {
+      case PipelineType.aar:
         pipeline = _doCreateAndroidModulePipeline(entity);
         break;
-      case PublishType.pod:
+      case PipelineType.pod:
         pipeline = _doCreateIOSModulePipeline(entity);
         break;
+      case PipelineType.apk:
+        pipeline = _doCreateAndroidApkPipeline(entity);
+        break;
+      case PipelineType.ipa:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case PipelineType.androidCheckModule:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case PipelineType.iosCheckModule:
+        // TODO: Handle this case.
+        throw UnimplementedError();
     }
 
     return pipeline;
@@ -47,13 +63,14 @@ class PipelineUseCase {
     return repo.loadAll();
   }
 
+  // 发布aar
   Pipeline? _doCreateAndroidModulePipeline(ModuleEntity entity) {
     var depCheckStage = DependencyCheckStage();
     var codeFetchStage = CodeFetchStage();
     var releaseStage = AndroidPackageReleaseState();
     final p = Pipeline(
         stages: [depCheckStage, codeFetchStage, releaseStage],
-        pipelineName: 'Android-AAR-Release',
+        pipelineName: pipelineName,
         args: {
           CONFIG_OPERATE_MODULES: {entity.moduleName: entity},
           CONFIG_ALL_MODULES: repo.loadAllAsMap(),
@@ -62,16 +79,33 @@ class PipelineUseCase {
     return p;
   }
 
+  // 发布pod
   Pipeline? _doCreateIOSModulePipeline(ModuleEntity entity) {
     var depCheckStage = DependencyCheckStage();
     var codeFetchStage = CodeFetchStage();
     var releaseStage = IOSPackageReleaseState();
     final p = Pipeline(
         stages: [depCheckStage, codeFetchStage, releaseStage],
-        pipelineName: 'iOS-Pod-Release',
+        pipelineName: pipelineName,
         args: {
           CONFIG_OPERATE_MODULES: {entity.moduleName: entity}
         });
+    return p;
+  }
+
+  // 发布apk
+  Pipeline? _doCreateAndroidApkPipeline(ModuleEntity entity) {
+    var depCheckStage = DependencyCheckStage();
+    var codeFetchStage = CodeFetchStage();
+    var releaseStage = AndroidAPKReleaseState();
+    final p = Pipeline(
+        stages: [depCheckStage, codeFetchStage, releaseStage],
+        pipelineName: pipelineName,
+        args: {
+          CONFIG_OPERATE_MODULES: {entity.moduleName: entity},
+          CONFIG_ALL_MODULES: repo.loadAllAsMap(),
+        });
+
     return p;
   }
 }

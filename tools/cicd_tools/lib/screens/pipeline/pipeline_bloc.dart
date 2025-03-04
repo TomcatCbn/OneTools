@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cicd_tools/cicd_tools.dart';
-import 'package:cicd_tools/domain/entities/publish_type.dart';
 import 'package:cicd_tools/screens/pipeline/pipeline_event.dart';
 import 'package:cicd_tools/screens/pipeline/pipeline_state.dart';
 import 'package:flutter/material.dart';
@@ -15,19 +14,26 @@ import '../../domain/usecases/modules_release.dart';
 class PipelineHomeBloc extends BaseBloc<PipelineHomeEvent, PipelineHomeState> {
   final Directory workDir;
   final String pipelineName;
+  final PipelineType pipelineType;
 
   final PipelineUseCase _useCase;
 
   final Map<String, ModuleEntity> _allModules = {};
 
-  PipelineHomeBloc({required this.workDir, required this.pipelineName})
-      : _useCase =
+  final TextEditingController filterController = TextEditingController();
+
+  PipelineHomeBloc({
+    required this.workDir,
+    required this.pipelineName,
+    required this.pipelineType,
+  })  : _useCase =
             PipelineUseCase(repo: ModuleRepoImpl(), pipelineName: pipelineName),
         super(const PipelineHomeState()) {
     on<PipelineInitEvent>(_onInitHomeEvent);
     on<ModuleSelectEvent>(_onModuleSelectEvent);
     on<BranchSelectEvent>(_onBranchSelectEvent);
     on<PipelineStartEvent>(_onStartPipelineEvent);
+    on<ModuleKeyWordChangedEvent>(_onModuleKeyWordChanged);
   }
 
   FutureOr<void> _onInitHomeEvent(
@@ -105,7 +111,7 @@ class PipelineHomeBloc extends BaseBloc<PipelineHomeEvent, PipelineHomeState> {
       return;
     }
 
-    var pipeline = _useCase.createPipeline(PublishType.aar, module,
+    var pipeline = _useCase.createPipeline(pipelineType.name, module,
         branch: selected.selectBranch);
     if (pipeline == null) {
       toastHelper.showToast(msg: '创建pipeline失败');
@@ -125,7 +131,26 @@ class PipelineHomeBloc extends BaseBloc<PipelineHomeEvent, PipelineHomeState> {
       toastHelper.showToast(msg: 'pipeline运行失败');
     }, ifRight: (v) {
       toastHelper.showToast(msg: 'pipeline运行成功');
-      Navigator.pop(navigatorKey.currentContext!);
     });
+    _useCase.release();
+    Navigator.pop(navigatorKey.currentContext!);
+  }
+
+  FutureOr<void> _onModuleKeyWordChanged(
+      ModuleKeyWordChangedEvent event, Emitter<PipelineHomeState> emit) async {
+    Logger.i(msg: 'ModuleKeyWordChangedEvent..., ${event.keyWord}');
+    var moduleStates = _allModules.values
+        .map((e) => ModuleState(moduleName: e.moduleName))
+        .toList(growable: false);
+
+    if (event.keyWord.isEmpty) {
+      emit(state.copyWith(modules: moduleStates));
+      return;
+    }
+
+    var list = moduleStates
+        .where((t) => t.moduleName.contains(event.keyWord))
+        .toList(growable: false);
+    emit(state.copyWith(modules: list));
   }
 }
