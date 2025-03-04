@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$HomeState {
   List<PipelineState> get pipelines => throw _privateConstructorUsedError;
+  List<PipelineRecord> get records => throw _privateConstructorUsedError;
 
   /// Create a copy of HomeState
   /// with the given fields replaced by the non-null parameter values.
@@ -30,7 +31,7 @@ abstract class $HomeStateCopyWith<$Res> {
   factory $HomeStateCopyWith(HomeState value, $Res Function(HomeState) then) =
       _$HomeStateCopyWithImpl<$Res, HomeState>;
   @useResult
-  $Res call({List<PipelineState> pipelines});
+  $Res call({List<PipelineState> pipelines, List<PipelineRecord> records});
 }
 
 /// @nodoc
@@ -49,12 +50,17 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
   @override
   $Res call({
     Object? pipelines = null,
+    Object? records = null,
   }) {
     return _then(_value.copyWith(
       pipelines: null == pipelines
           ? _value.pipelines
           : pipelines // ignore: cast_nullable_to_non_nullable
               as List<PipelineState>,
+      records: null == records
+          ? _value.records
+          : records // ignore: cast_nullable_to_non_nullable
+              as List<PipelineRecord>,
     ) as $Val);
   }
 }
@@ -67,7 +73,7 @@ abstract class _$$HomeStateImplCopyWith<$Res>
       __$$HomeStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<PipelineState> pipelines});
+  $Res call({List<PipelineState> pipelines, List<PipelineRecord> records});
 }
 
 /// @nodoc
@@ -84,12 +90,17 @@ class __$$HomeStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? pipelines = null,
+    Object? records = null,
   }) {
     return _then(_$HomeStateImpl(
       pipelines: null == pipelines
           ? _value._pipelines
           : pipelines // ignore: cast_nullable_to_non_nullable
               as List<PipelineState>,
+      records: null == records
+          ? _value._records
+          : records // ignore: cast_nullable_to_non_nullable
+              as List<PipelineRecord>,
     ));
   }
 }
@@ -97,8 +108,11 @@ class __$$HomeStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$HomeStateImpl implements _HomeState {
-  const _$HomeStateImpl({final List<PipelineState> pipelines = const []})
-      : _pipelines = pipelines;
+  const _$HomeStateImpl(
+      {final List<PipelineState> pipelines = const [],
+      final List<PipelineRecord> records = const []})
+      : _pipelines = pipelines,
+        _records = records;
 
   final List<PipelineState> _pipelines;
   @override
@@ -109,9 +123,18 @@ class _$HomeStateImpl implements _HomeState {
     return EqualUnmodifiableListView(_pipelines);
   }
 
+  final List<PipelineRecord> _records;
+  @override
+  @JsonKey()
+  List<PipelineRecord> get records {
+    if (_records is EqualUnmodifiableListView) return _records;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_records);
+  }
+
   @override
   String toString() {
-    return 'HomeState(pipelines: $pipelines)';
+    return 'HomeState(pipelines: $pipelines, records: $records)';
   }
 
   @override
@@ -120,12 +143,15 @@ class _$HomeStateImpl implements _HomeState {
         (other.runtimeType == runtimeType &&
             other is _$HomeStateImpl &&
             const DeepCollectionEquality()
-                .equals(other._pipelines, _pipelines));
+                .equals(other._pipelines, _pipelines) &&
+            const DeepCollectionEquality().equals(other._records, _records));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_pipelines));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_pipelines),
+      const DeepCollectionEquality().hash(_records));
 
   /// Create a copy of HomeState
   /// with the given fields replaced by the non-null parameter values.
@@ -137,11 +163,14 @@ class _$HomeStateImpl implements _HomeState {
 }
 
 abstract class _HomeState implements HomeState {
-  const factory _HomeState({final List<PipelineState> pipelines}) =
-      _$HomeStateImpl;
+  const factory _HomeState(
+      {final List<PipelineState> pipelines,
+      final List<PipelineRecord> records}) = _$HomeStateImpl;
 
   @override
   List<PipelineState> get pipelines;
+  @override
+  List<PipelineRecord> get records;
 
   /// Create a copy of HomeState
   /// with the given fields replaced by the non-null parameter values.

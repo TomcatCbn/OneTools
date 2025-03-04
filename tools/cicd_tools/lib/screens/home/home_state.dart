@@ -6,8 +6,10 @@ part 'home_state.freezed.dart';
 
 @freezed
 class HomeState with _$HomeState {
-  const factory HomeState({@Default([]) List<PipelineState> pipelines}) =
-      _HomeState;
+  const factory HomeState({
+    @Default([]) List<PipelineState> pipelines,
+    @Default([]) List<PipelineRecord> records,
+  }) = _HomeState;
 }
 
 class PipelineState {

@@ -44,19 +44,36 @@ class _BodyWidget extends StatelessWidget {
   }
 
   Widget buildContent(BuildContext context, HomeState state) {
-    return ListView.separated(
-        itemBuilder: (context, index) {
-          var pipeline = state.pipelines[index];
-          return ElevatedButton(
-              onPressed: () {
-                context.read<HomeBloc>().add(
-                    HomeClickPipelineEvent(index: index, context: context));
+    return Column(
+      children: [
+        Flexible(
+          flex: 3,
+          child: ListView.separated(
+              itemBuilder: (context, index) {
+                var pipeline = state.pipelines[index];
+                return ElevatedButton(
+                    onPressed: () {
+                      context.read<HomeBloc>().add(HomeClickPipelineEvent(
+                          index: index, context: context));
+                    },
+                    child: Text(pipeline.name));
               },
-              child: Text(pipeline.name));
-        },
-        separatorBuilder: (context, index) {
-          return const Divider();
-        },
-        itemCount: state.pipelines.length);
+              separatorBuilder: (context, index) {
+                return const Divider();
+              },
+              itemCount: state.pipelines.length),
+        ),
+        Flexible(
+          flex: 1,
+          child: ListView.builder(
+            itemBuilder: (context, index) {
+              var record = state.records[index];
+              return Text(record.toString());
+            },
+            itemCount: state.records.length,
+          ),
+        ),
+      ],
+    );
   }
 }

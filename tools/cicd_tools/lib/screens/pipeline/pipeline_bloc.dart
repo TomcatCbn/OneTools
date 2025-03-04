@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cicd_tools/cicd_tools.dart';
+import 'package:cicd_tools/config/config_onesdk/environment_config_impl.dart';
 import 'package:cicd_tools/screens/pipeline/pipeline_event.dart';
 import 'package:cicd_tools/screens/pipeline/pipeline_state.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,7 @@ import 'package:platform_utils/platform_utils.dart';
 
 import '../../config/config_onesdk/module_repo_impl.dart';
 import '../../domain/entities/cicd_pipeline.dart';
-import '../../domain/usecases/modules_release.dart';
+import '../../domain/usecases/pipeline_usecase.dart';
 
 class PipelineHomeBloc extends BaseBloc<PipelineHomeEvent, PipelineHomeState> {
   final Directory workDir;
@@ -112,7 +113,7 @@ class PipelineHomeBloc extends BaseBloc<PipelineHomeEvent, PipelineHomeState> {
     }
 
     var pipeline = _useCase.createPipeline(pipelineType.name, module,
-        branch: selected.selectBranch);
+        branch: selected.selectBranch, env: EnvironmentImpl());
     if (pipeline == null) {
       toastHelper.showToast(msg: '创建pipeline失败');
       return;

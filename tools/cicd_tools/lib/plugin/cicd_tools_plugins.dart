@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cicd_tools/infra/db/database/cicd_tools_db.dart';
 import 'package:cicd_tools/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:platform_plugins/platform_plugins.dart';
@@ -47,7 +48,15 @@ class CICDTools implements PlatformPlugin, PlatformPluginLifeCycleListener {
     }
   }
 
-  void _onPluginCreate() async {}
+  void _onPluginCreate() async {
+    await $FloorCICDToolsDatabase
+        .databaseBuilder(
+        '${CICDTools().workDirName}/db/${CICDTools().pluginId}.db')
+        .build()
+        .then((onValue) {
+      cicdToolsDatabase = onValue;
+    });
+  }
 
   @override
   String get homeRoute => '/cicd_tools/home';

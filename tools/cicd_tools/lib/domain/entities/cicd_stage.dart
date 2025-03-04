@@ -155,8 +155,10 @@ class AndroidPackageReleaseState extends CICDStage with GradleAction {
     Logger.i(msg: '$nameId, 准备执行${modules.length}个module发布');
     // 工作目录
     final String workDir = args[CONFIG_PIPELINE_WORKSPACE] as String;
+    final Map<String, String>? env =
+        args[CONFIG_PIPELINE_ENVIRONMENT] as Map<String, String>?;
     var list = modules.values
-        .map((e) => _createGradleTask(e, '$workDir/${e.moduleName}'))
+        .map((e) => _createGradleTask(e, '$workDir/${e.moduleName}', env))
         .toList(growable: false);
     try {
       var results = await Future.wait(list);
@@ -176,9 +178,12 @@ class AndroidPackageReleaseState extends CICDStage with GradleAction {
   }
 
   Future<Either<CICDError, void>> _createGradleTask(
-      ModuleEntity entity, String workDir) {
+    ModuleEntity entity,
+    String workDir,
+    Map<String, String>? env,
+  ) {
     return entity.artifactoryPublish(
-        workDir: workDir, moduleName: entity.repo.path);
+        workDir: workDir, moduleName: entity.repo.path, env: env);
   }
 }
 
@@ -209,8 +214,10 @@ class AndroidAPKReleaseState extends CICDStage with GradleAction {
     Logger.i(msg: '$nameId, 准备执行apk构建');
     // 工作目录
     final String workDir = args[CONFIG_PIPELINE_WORKSPACE] as String;
+    final Map<String, String>? env =
+        args[CONFIG_PIPELINE_ENVIRONMENT] as Map<String, String>?;
     var list = modules.values
-        .map((e) => _createGradleTask(e, '$workDir/${e.moduleName}'))
+        .map((e) => _createGradleTask(e, '$workDir/${e.moduleName}', env))
         .toList(growable: false);
     try {
       var results = await Future.wait(list);
@@ -230,8 +237,8 @@ class AndroidAPKReleaseState extends CICDStage with GradleAction {
   }
 
   Future<Either<CICDError, void>> _createGradleTask(
-      ModuleEntity entity, String workDir) {
+      ModuleEntity entity, String workDir, Map<String, String>? env) {
     return entity.artifactoryPublish(
-        workDir: workDir, moduleName: entity.repo.path);
+        workDir: workDir, moduleName: entity.repo.path, env: env);
   }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cicd_tools/domain/entities/cicd_pipeline.dart';
+import 'package:cicd_tools/domain/usecases/pipeline_record_usecase.dart';
 import 'package:cicd_tools/screens/pipeline/pipeline_screen.dart';
 import 'package:cicd_tools/screens/widgets/login_widget.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import 'home_state.dart';
 
 class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
   final Directory workDir;
+  final PipelineRecordsUseCase _useCase = PipelineRecordsUseCase();
 
   HomeBloc({required this.workDir}) : super(const HomeState()) {
     on<HomeInitEvent>(_onInitHomeEvent);
@@ -46,7 +48,10 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
     list.add(checkAndroidModule);
     // list.add(repoMerge);
 
-    emit(state.copyWith(pipelines: list));
+    // 刷新record列表
+    var records = await _useCase.loadLatestRecords();
+
+    emit(state.copyWith(pipelines: list, records: records));
     toastHelper.dismissLoading();
   }
 
@@ -60,7 +65,7 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
       return;
     }
 
-    Navigator.push(
+    await Navigator.push(
       navigatorKey.currentContext!,
       MaterialPageRoute(builder: (BuildContext context) {
         return PipelineHomeScreen(
@@ -70,6 +75,12 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
         );
       }),
     );
+
+    // 刷新record列表
+    // 延迟一段时间，保证record数据已经更新
+    await Future.delayed(const Duration(seconds: 1));
+    var list = await _useCase.loadLatestRecords();
+    emit(state.copyWith(records: list));
   }
 
   Future<bool> showUserInfoDialog(BuildContext context) async {
