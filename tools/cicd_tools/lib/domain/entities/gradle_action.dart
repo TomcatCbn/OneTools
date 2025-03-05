@@ -26,4 +26,23 @@ mixin GradleAction {
 
     return Either.right(res);
   }
+
+  // 获取目标publishVersion
+  Future<Either<CICDError, String>> getPublishVersion(
+      {required String workDir,
+      required String moduleName,
+      Map<String, String>? env}) async {
+    var cmd = GradlePublishVersionCMD(
+        moduleName: moduleName, workDir: Directory(workDir), env: env);
+    String res = '';
+    try {
+      var either = await cmd.run();
+      res = either.fold(ifLeft: (v) => '', ifRight: (v) => v);
+    } catch (e) {
+      Logger.e(msg: 'get publish version failed, $e', tag: _tag);
+      return Either.left(CICDRuntimeError(e.toString()));
+    }
+
+    return Either.right(res);
+  }
 }

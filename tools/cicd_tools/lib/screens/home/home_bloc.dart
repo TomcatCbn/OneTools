@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cicd_tools/domain/entities/cicd_pipeline.dart';
+import 'package:cicd_tools/domain/services/operator_service.dart';
 import 'package:cicd_tools/domain/usecases/pipeline_record_usecase.dart';
 import 'package:cicd_tools/screens/pipeline/pipeline_screen.dart';
 import 'package:cicd_tools/screens/widgets/login_widget.dart';
@@ -33,10 +34,10 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
     PipelineState publishIOSModule =
         PipelineState(name: 'iOS Module 发布', pipelineType: PipelineType.pod);
     PipelineState checkAndroidModule = PipelineState(
-        name: 'Check Android Module',
+        name: 'Check Android Module (TODO)',
         pipelineType: PipelineType.androidCheckModule);
     PipelineState checkIOSModule = PipelineState(
-        name: 'Check iOS Module', pipelineType: PipelineType.iosCheckModule);
+        name: 'Check iOS Module (TODO)', pipelineType: PipelineType.iosCheckModule);
     // PipelineState repoMerge = PipelineState(name: '仓库分支Merge');
 
     List<PipelineState> list = [];
@@ -58,11 +59,13 @@ class HomeBloc extends BaseBloc<HomeEvent, HomeState> {
   FutureOr<void> _onHomeClickPipelineEvent(
       HomeClickPipelineEvent event, Emitter<HomeState> emit) async {
     var pipeline = state.pipelines[event.index];
-    // 检查操作员
-    var bool = await showUserInfoDialog(event.context);
-    if (!bool) {
-      toastHelper.showToast(msg: '请核对账号');
-      return;
+    if (!OperatorService().skipCheck) {
+      // 检查操作员
+      var bool = await showUserInfoDialog(event.context);
+      if (!bool) {
+        toastHelper.showToast(msg: '请核对账号');
+        return;
+      }
     }
 
     await Navigator.push(

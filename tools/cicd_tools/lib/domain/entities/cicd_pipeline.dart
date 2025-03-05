@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:cicd_tools/domain/entities/cicd_errors.dart';
-import 'package:cicd_tools/domain/entities/cicd_stage.dart';
+import 'package:cicd_tools/domain/entities/stages/cicd_stage.dart';
 import 'package:cicd_tools/domain/entities/stage_config.dart';
 import 'package:cicd_tools/plugin/cicd_tools_plugins.dart';
 import 'package:platform_utils/platform_command.dart';
@@ -16,6 +16,8 @@ class Pipeline with Runnable {
   final String pipelineName;
   int id = 0;
   final Map<String, Object> initialArgs = {};
+  PipelineStatus pipelineStatus = PipelineStatus.idle;
+  String operationLog = '';
 
   Pipeline({
     required this.stages,
@@ -30,8 +32,10 @@ class Pipeline with Runnable {
     // 添加环境变量
     if (environment != null) {
       var envMap = {
-        CONFIG_ENV_ANDROID_HOME: environment.androidHome,
-        CONFIG_ENV_JAVA_HOME: environment.javaHome,
+        if (environment.androidHome.isNotEmpty)
+          CONFIG_ENV_ANDROID_HOME: environment.androidHome,
+        if (environment.javaHome.isNotEmpty)
+          CONFIG_ENV_JAVA_HOME: environment.javaHome,
       };
       initialArgs[CONFIG_PIPELINE_ENVIRONMENT] = envMap;
       Logger.i(msg: 'pipeline env = $envMap');
@@ -53,6 +57,7 @@ class Pipeline with Runnable {
     // 按照顺序执行所有的stage
     Logger.d(msg: '-------- begin pipeline $pipelineName---------------');
 
+    pipelineStatus = PipelineStatus.running;
     _eventController.add(
         PipelineStatusChangedEvent(status: PipelineStatus.running, id: id));
 
@@ -83,10 +88,12 @@ class Pipeline with Runnable {
     Logger.d(msg: '--------- ${error != null ? 'failed' : 'success'}---------');
 
     if (error == null) {
+      pipelineStatus = PipelineStatus.success;
       _eventController.add(
           PipelineStatusChangedEvent(status: PipelineStatus.success, id: id));
       return Either.right(argsL);
     }
+    pipelineStatus = PipelineStatus.failed;
     _eventController
         .add(PipelineStatusChangedEvent(status: PipelineStatus.failed, id: id));
     return Either.left(error);
@@ -158,11 +165,19 @@ class PipelineRecord {
 
   final String operator;
 
-  PipelineRecord(
-      {this.id = 0,
-      required this.operator,
-      required this.pipelineName,
-      required this.createTime});
+  final String operationLog;
+
+  // 关联的模块
+  final List<String> modulesName;
+
+  PipelineRecord({
+    this.id = 0,
+    required this.operator,
+    required this.pipelineName,
+    required this.createTime,
+    required this.operationLog,
+    required this.modulesName,
+  });
 
   @override
   String toString() {

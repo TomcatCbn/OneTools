@@ -96,7 +96,7 @@ class _$CICDToolsDatabase extends CICDToolsDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `pipeline_record` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `pipeline_name` TEXT, `create_time` INTEGER, `completed_time` INTEGER, `status` TEXT, `operator` TEXT)');
+            'CREATE TABLE IF NOT EXISTS `pipeline_record` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `pipeline_name` TEXT, `create_time` INTEGER, `completed_time` INTEGER, `status` TEXT, `operator` TEXT, `operation_log` TEXT, `modules_name` TEXT)');
         await database.execute(
             'CREATE INDEX `index_pipeline_record_pipeline_name_id` ON `pipeline_record` (`pipeline_name`, `id`)');
 
@@ -126,7 +126,9 @@ class _$PipelineRecordDao extends PipelineRecordDao {
                   'create_time': item.createTime,
                   'completed_time': item.completedTime,
                   'status': item.status,
-                  'operator': item.operator
+                  'operator': item.operator,
+                  'operation_log': item.operationLog,
+                  'modules_name': item.modulesName
                 }),
         _pipelineRecordPoUpdateAdapter = UpdateAdapter(
             database,
@@ -138,7 +140,9 @@ class _$PipelineRecordDao extends PipelineRecordDao {
                   'create_time': item.createTime,
                   'completed_time': item.completedTime,
                   'status': item.status,
-                  'operator': item.operator
+                  'operator': item.operator,
+                  'operation_log': item.operationLog,
+                  'modules_name': item.modulesName
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -161,7 +165,9 @@ class _$PipelineRecordDao extends PipelineRecordDao {
             createTime: row['create_time'] as int?,
             status: row['status'] as String?,
             completedTime: row['completed_time'] as int?,
-            operator: row['operator'] as String?),
+            operator: row['operator'] as String?,
+            operationLog: row['operation_log'] as String?,
+            modulesName: row['modules_name'] as String?),
         arguments: [latestNum]);
   }
 
@@ -174,7 +180,9 @@ class _$PipelineRecordDao extends PipelineRecordDao {
             createTime: row['create_time'] as int?,
             status: row['status'] as String?,
             completedTime: row['completed_time'] as int?,
-            operator: row['operator'] as String?),
+            operator: row['operator'] as String?,
+            operationLog: row['operation_log'] as String?,
+            modulesName: row['modules_name'] as String?),
         arguments: [id]);
   }
 

@@ -3,16 +3,13 @@
   "projectDesc": "CEA OneSDK iOS",
   "codeRepos": [
     {
-      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/debugtools.git"
-    },
-    {
       "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/apps.git"
     },
     {
-      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/oneuikit.git"
+      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/debugtools.git"
     },
     {
-      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/XPXcomboSDK.git"
+      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/oneuikit.git"
     },
     {
       "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/vw-vehicle-ios-demo.git"
@@ -21,10 +18,43 @@
       "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/vw-vehicle-ios-sdk.git"
     },
     {
+      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/vwappgroup.git"
+    },
+    {
+      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/vwbbox.git"
+    },
+    {
+      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/vwcategory.git"
+    },
+    {
+      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/vwcloudconfig.git"
+    },
+    {
+      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/vwdeviceinfo.git"
+    },
+    {
+      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/vwkeychain.git"
+    },
+    {
+      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/vwnetwork.git"
+    },
+    {
+      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/vwnetworkmoniitormanager.git"
+    },
+    {
+      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/vwteeencrypted.git"
+    },
+    {
+      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/vwutility.git"
+    },
+    {
       "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/xpbledataprocessor.git"
     },
     {
       "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/xpvehicleext.git"
+    },
+    {
+      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/xpxcombosdk.git"
     }
   ]
 }

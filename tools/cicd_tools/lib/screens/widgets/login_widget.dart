@@ -69,6 +69,9 @@ class _LoginDialogState extends State<LoginDialog> {
               labelText: 'Password',
             ),
             obscureText: true,
+            onSubmitted: (v) {
+              _handleLogin();
+            },
           ),
         ],
       ),

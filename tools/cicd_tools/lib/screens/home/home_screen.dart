@@ -1,7 +1,10 @@
 import 'dart:io';
 
+import 'package:cicd_tools/screens/record/pipeline_record_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:platform_utils/platform_screenutils.dart';
 import 'package:platform_utils/platform_utils.dart';
+import 'package:platform_utils/platform_widget_ex.dart';
 
 import 'home_bloc.dart';
 import 'home_event.dart';
@@ -47,7 +50,7 @@ class _BodyWidget extends StatelessWidget {
     return Column(
       children: [
         Flexible(
-          flex: 3,
+          flex: 2,
           child: ListView.separated(
               itemBuilder: (context, index) {
                 var pipeline = state.pipelines[index];
@@ -56,22 +59,39 @@ class _BodyWidget extends StatelessWidget {
                       context.read<HomeBloc>().add(HomeClickPipelineEvent(
                           index: index, context: context));
                     },
-                    child: Text(pipeline.name));
+                    child: Text(pipeline.name)).addPadding(EdgeInsets.symmetric(horizontal: 8.sp));
               },
               separatorBuilder: (context, index) {
                 return const Divider();
               },
               itemCount: state.pipelines.length),
         ),
+        const Text('Pipeline Record 列表'),
         Flexible(
-          flex: 1,
-          child: ListView.builder(
+          flex: 2,
+          child: ListView.separated(
             itemBuilder: (context, index) {
               var record = state.records[index];
-              return Text(record.toString());
+              return Column(
+                children: [
+                  Text(
+                      '${record.id}.${record.pipelineName}: ${record.modulesName}'),
+                  Text('$record'),
+                  Text('查看Log: ${record.operationLog}').onTap(() {
+                    Navigator.push(
+                      navigatorKey.currentContext!,
+                      MaterialPageRoute(builder: (BuildContext context) {
+                        return PipelineRecordScreen(
+                          record: record,
+                        );
+                      }),
+                    );
+                  }),
+                ],
+              );
             },
-            itemCount: state.records.length,
-          ),
+            itemCount: state.records.length, separatorBuilder: (BuildContext context, int index) { return const Divider(); },
+          ).addPadding(EdgeInsets.all(8.sp)),
         ),
       ],
     );

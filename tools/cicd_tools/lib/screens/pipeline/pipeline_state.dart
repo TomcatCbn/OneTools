@@ -22,6 +22,11 @@ class ModuleState {
   String selectBranch = '';
 
   ModuleState({required this.moduleName});
+
+  @override
+  String toString() {
+    return 'ModuleState{moduleName: $moduleName, branches: $branches, selectBranch: $selectBranch}';
+  }
 }
 
 enum BtnState {

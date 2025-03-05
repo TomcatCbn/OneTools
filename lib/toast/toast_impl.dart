@@ -1,6 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:platform_utils/platform_screenutils.dart';
 import 'package:platform_utils/platform_utils.dart';
 
 class ToastImpl implements IToast {
@@ -27,6 +28,9 @@ class ToastImpl implements IToast {
           children: [
             const CircularProgressIndicator(
               backgroundColor: Colors.white,
+            ),
+            SizedBox(
+              height: 8.sp,
             ),
             Text(msg),
           ],

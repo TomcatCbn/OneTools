@@ -49,6 +49,24 @@ class PipelineHomeBloc extends BaseBloc<PipelineHomeEvent, PipelineHomeState> {
     var moduleStates = allModules
         .map((e) => ModuleState(moduleName: e.moduleName))
         .toList(growable: false);
+    String filter = '';
+    switch (pipelineType) {
+      case PipelineType.aar:
+      case PipelineType.apk:
+      case PipelineType.androidCheckModule:
+        filter = 'android';
+        break;
+      case PipelineType.pod:
+      case PipelineType.ipa:
+      case PipelineType.iosCheckModule:
+        filter = 'ios';
+        break;
+    }
+
+    moduleStates = moduleStates
+        .where((e) => e.moduleName.startsWith(filter))
+        .toList(growable: false);
+    filterController.text = filter;
     emit(state.copyWith(modules: moduleStates));
   }
 
@@ -122,7 +140,9 @@ class PipelineHomeBloc extends BaseBloc<PipelineHomeEvent, PipelineHomeState> {
     // 开始监听pipeline事件
     pipeline.pipelineEvent.listen((onData) {
       if (onData is StageChangedEvent) {
-        toastHelper.showLoading(msg: 'Running ${onData.stage.nameId}');
+        if (pipeline.pipelineStatus == PipelineStatus.running) {
+          toastHelper.showLoading(msg: 'Running ${onData.stage.nameId}...');
+        }
       }
     });
 

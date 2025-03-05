@@ -7,4 +7,9 @@ class OperatorEntity {
 
   ///
   OperatorEntity({required this.name, required this.pwd});
+
+  @override
+  String toString() {
+    return 'Operator($name)';
+  }
 }

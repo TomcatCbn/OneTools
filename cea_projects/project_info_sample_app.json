@@ -1,0 +1,12 @@
+{
+  "projectName": "cea-onesdk-sample-app",
+  "projectDesc": "CEA OneSDK Sample APP",
+  "codeRepos": [
+    {
+      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/sample/sample-app-android.git"
+    },
+    {
+      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/sample/sample-app-ios.git"
+    }
+  ]
+}

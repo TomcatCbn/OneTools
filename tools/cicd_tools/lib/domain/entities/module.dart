@@ -11,6 +11,8 @@ class ModuleEntity with GitAction, GradleAction {
 
   String targetBranch = 'develop';
 
+  String targetTag = '';
+
   final List<String> dependencyModules = [];
 
   ModuleEntity({required this.repo, required this.moduleName});

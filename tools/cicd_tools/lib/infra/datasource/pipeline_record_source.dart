@@ -36,6 +36,8 @@ class PipelineRecordLocalDataSource {
       status: status?.name,
       completedTime: completedTime?.millisecondsSinceEpoch,
       operator: findRecordBy.operator,
+      operationLog: findRecordBy.operationLog,
+      modulesName: findRecordBy.modulesName,
     ));
     return true;
   }

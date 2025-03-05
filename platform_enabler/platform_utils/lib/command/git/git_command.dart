@@ -128,11 +128,47 @@ class GitTag extends GitCMD<String> {
     if (tag.isEmpty) {
       return Either.left(CommonError.paramsInvalid() as E);
     }
+    // 先查询远端是否存在，如果存在，则先删除
+    var gittags = await ShellUtils.execCMD([_gitCMD, _gitCMDTag], workDir);
+    if (gittags.isLeft) {
+      return Either.left(CommonError.paramsInvalid() as E);
+    }
+    var exist = gittags.fold(ifLeft: (e) {
+      return false;
+    }, ifRight: (v) {
+      return v.stdout?.contains(tag) ?? false;
+    });
+
+    if (exist) {
+      // 先删除
+      Logger.i(msg: '远端存在，先删除$tag');
+      await GitDeleteTag(workDir: workDir, tag: tag).run();
+    }
+
     var either = await ShellUtils.execCMD([_gitCMD, _gitCMDTag, tag], workDir);
     if (either.isRight) {
       either =
           await ShellUtils.execCMD([_gitCMD, _gitCMDPush, '--tag'], workDir);
     }
+
+    return either.fold(
+        ifLeft: (l) => Left(l as E),
+        ifRight: (r) => Right((r.stdout ?? 'unknown').toString().trim()));
+  }
+}
+
+class GitDeleteTag extends GitCMD<String> {
+  final String tag;
+
+  GitDeleteTag({required super.workDir, required this.tag});
+
+  @override
+  Future<Either<E, String>> run<E extends ToolsError>() async {
+    if (tag.isEmpty) {
+      return Either.left(CommonError.paramsInvalid() as E);
+    }
+    var either = await ShellUtils.execCMD(
+        [_gitCMD, _gitCMDPush, 'origin', '--delete', tag], workDir);
 
     return either.fold(
         ifLeft: (l) => Left(l as E),

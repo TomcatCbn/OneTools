@@ -22,39 +22,39 @@ class Logger {
   }
 
   static void i({String msg = '', String tag = 'DEFAULT'}) {
-    final t = '[INFO][$tag] $msg';
+    final t = '$_formatTime [I] [$tag] $msg';
     if (logConsole) {
       _logger.i(t);
     }
-    _backup?.write(t);
-    _logSink?.write(t);
+    _backup?.writeln(t);
+    _logSink?.writeln(t);
   }
 
   static void d({String msg = '', String tag = 'DEFAULT'}) {
-    final t = '[DEBUG][$tag] $msg';
+    final t = '$_formatTime [D] [$tag] $msg';
     if (logConsole) {
       _logger.d(t);
     }
-    _backup?.write(t);
-    _logSink?.write(t);
+    _backup?.writeln(t);
+    _logSink?.writeln(t);
   }
 
   static void w({String msg = '', String tag = 'DEFAULT'}) {
-    final t = '[WARN][$tag] $msg';
+    final t = '$_formatTime [W] [$tag] $msg';
     if (logConsole) {
       _logger.d(t);
     }
-    _backup?.write(t);
-    _logSink?.write(t);
+    _backup?.writeln(t);
+    _logSink?.writeln(t);
   }
 
   static void e({String msg = '', String tag = 'DEFAULT'}) {
-    final t = '[ERROR][$tag] $msg';
+    final t = '$_formatTime [E] [$tag] $msg';
     if (logConsole) {
       _logger.e(t);
     }
-    _backup?.write(t);
-    _logSink?.write(t);
+    _backup?.writeln(t);
+    _logSink?.writeln(t);
   }
 
   // 创建一个新的日志文件，同时所有后续的操作也会记录到这份文件中
@@ -75,5 +75,10 @@ class Logger {
       _logSink?.close();
       _logSink = null;
     } catch (e) {}
+  }
+
+  static String get _formatTime  {
+    return formatDate(
+        DateTime.now(), [yyyy, '-', mm, '-', dd, '-', HH, ':', nn, ':', ss]);
   }
 }

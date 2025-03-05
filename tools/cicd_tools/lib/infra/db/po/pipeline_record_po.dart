@@ -24,6 +24,13 @@ class PipelineRecordPo {
   @ColumnInfo(name: 'operator')
   final String? operator;
 
+  @ColumnInfo(name: 'operation_log')
+  final String? operationLog;
+
+  // 用,分割
+  @ColumnInfo(name: 'modules_name')
+  final String? modulesName;
+
   PipelineRecordPo({
     this.id,
     this.pipelineName,
@@ -31,6 +38,8 @@ class PipelineRecordPo {
     this.status,
     this.completedTime,
     this.operator,
+    this.operationLog,
+    this.modulesName,
   });
 
   PipelineRecordPo.from(PipelineRecord record)
@@ -39,6 +48,8 @@ class PipelineRecordPo {
         createTime = record.createTime.millisecondsSinceEpoch,
         status = record.status.name,
         operator = record.operator,
+        operationLog = record.operationLog,
+        modulesName = record.modulesName.join(','),
         completedTime = record.completedTime?.millisecondsSinceEpoch ?? 0;
 
   PipelineRecord toDo() {
@@ -47,6 +58,8 @@ class PipelineRecordPo {
       pipelineName: pipelineName ?? '',
       createTime: DateTime.fromMillisecondsSinceEpoch(createTime ?? 0),
       operator: operator ?? 'unknown',
+      operationLog: operationLog ?? '',
+      modulesName: modulesName?.split(',') ?? [],
     );
     pipelineRecord.status = status?.toPipelineStatus() ?? PipelineStatus.idle;
     pipelineRecord.completedTime =
