@@ -167,6 +167,9 @@ class GitDeleteTag extends GitCMD<String> {
     if (tag.isEmpty) {
       return Either.left(CommonError.paramsInvalid() as E);
     }
+    try {
+      await ShellUtils.execCMD([_gitCMD, _gitCMDTag, '-d', tag], workDir);
+    } catch (e) {}
     var either = await ShellUtils.execCMD(
         [_gitCMD, _gitCMDPush, 'origin', '--delete', tag], workDir);
 
