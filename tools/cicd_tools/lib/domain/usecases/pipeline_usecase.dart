@@ -40,8 +40,8 @@ class PipelineUseCase {
     });
   }
 
-  Pipeline? createPipeline(String pipelineType, ModuleEntity entity,
-      {required String branch, Environment? env}) {
+  Future<Pipeline?> createPipeline(String pipelineType, ModuleEntity entity,
+      {required String branch, Environment? env}) async {
     Logger.i(
         msg:
             'createPipeline, pipelineName: $pipelineName, moduleName: ${entity.moduleName}, branch: $branch, operator: ${OperatorService().operatorName}');
@@ -79,9 +79,8 @@ class PipelineUseCase {
         operationLog: operationLog,
         modulesName: [entity.moduleName],
       );
-      pipelineRecordRepo.saveRecord(pipelineRecord).then((onValue) {
-        p.id = onValue;
-      });
+      var id = await pipelineRecordRepo.saveRecord(pipelineRecord);
+      pipeline.id = id;
 
       // 监听
 

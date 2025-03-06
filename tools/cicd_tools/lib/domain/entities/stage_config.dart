@@ -15,6 +15,9 @@ const String CONFIG_PIPELINE_WORKSPACE = "config_pipeline_workspace";
 const String CONFIG_PIPELINE_ENVIRONMENT = "config_pipeline_environment";
 
 /// value = String
+const String CONFIG_PIPELINE_BUILD_ID = "config_pipeline_build_id";
+
+/// value = String
 const String CONFIG_ENV_ANDROID_HOME = 'ANDROID_HOME';
 
 /// value = String

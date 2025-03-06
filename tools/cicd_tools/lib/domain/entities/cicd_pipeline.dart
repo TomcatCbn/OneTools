@@ -57,6 +57,20 @@ class Pipeline with Runnable {
     // 按照顺序执行所有的stage
     Logger.d(msg: '-------- begin pipeline $pipelineName---------------');
 
+    args[CONFIG_PIPELINE_BUILD_ID] = '$id.${formatDate(DateTime.now(), [
+          yyyy,
+          '-',
+          mm,
+          '-',
+          dd,
+          '-',
+          HH,
+          ':',
+          nn,
+          ':',
+          ss
+        ])}';
+
     pipelineStatus = PipelineStatus.running;
     _eventController.add(
         PipelineStatusChangedEvent(status: PipelineStatus.running, id: id));

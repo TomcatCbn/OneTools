@@ -27,12 +27,6 @@
       "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/ResourceSdk.git"
     },
     {
-      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/protocol-v3.git"
-    },
-    {
-      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/XCombo.git"
-    },
-    {
       "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/resourcesdk.git"
     },
     {
@@ -60,16 +54,10 @@
       "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/xpfingerprint.git"
     },
     {
-      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/xplog.git"
-    },
-    {
       "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/xpmmkv.git"
     },
     {
       "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/xpnetwork.git"
-    },
-    {
-      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/xpbasetools.git"
     },
     {
       "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/android/xtee.git"

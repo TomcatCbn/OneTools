@@ -1,5 +1,6 @@
 import 'package:platform_utils/platform_command.dart';
 import 'package:platform_utils/platform_logger.dart';
+import 'package:platform_utils/platform_utils.dart';
 
 import '../cicd_errors.dart';
 import '../module.dart';

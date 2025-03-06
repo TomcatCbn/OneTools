@@ -48,13 +48,13 @@
       "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/vwutility.git"
     },
     {
-      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/xpbledataprocessor.git"
+      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/ios/xpbledataprocessor.git"
     },
     {
-      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/xpvehicleext.git"
+      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/ios/xpvehicleext.git"
     },
     {
-      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/ios/xpxcombosdk.git"
+      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/ios/xpxcombosdk.git"
     }
   ]
 }

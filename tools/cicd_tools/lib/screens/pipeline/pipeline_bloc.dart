@@ -130,7 +130,7 @@ class PipelineHomeBloc extends BaseBloc<PipelineHomeEvent, PipelineHomeState> {
       return;
     }
 
-    var pipeline = _useCase.createPipeline(pipelineType.name, module,
+    var pipeline = await _useCase.createPipeline(pipelineType.name, module,
         branch: selected.selectBranch, env: EnvironmentImpl());
     if (pipeline == null) {
       toastHelper.showToast(msg: '创建pipeline失败');

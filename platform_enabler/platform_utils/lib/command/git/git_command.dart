@@ -46,10 +46,16 @@ class GitClone extends GitCMD<bool> {
       workDir.createSync(recursive: true);
     }
 
-    var eitherRes = await (branch.isEmpty
-        ? ShellUtils.execCMD([_gitCMD, _gitCMDClone, repoUrl, dirName], workDir)
-        : ShellUtils.execCMD(
-            [_gitCMD, _gitCMDClone, '-b', branch, repoUrl, dirName], workDir));
+    var cmdList = <String>[];
+    if (branch.isEmpty) {
+      cmdList.addAll([_gitCMD, _gitCMDClone, repoUrl]);
+    } else {
+      cmdList.addAll([_gitCMD, _gitCMDClone, '-b', branch, repoUrl]);
+    }
+    if (dirName.isNotEmpty) {
+      cmdList.add(dirName);
+    }
+    var eitherRes = await ShellUtils.execCMD(cmdList, workDir);
     return eitherRes.fold(
         ifLeft: (l) => Either.left(l as E),
         ifRight: (r) => Either.right(r.isSuccess));

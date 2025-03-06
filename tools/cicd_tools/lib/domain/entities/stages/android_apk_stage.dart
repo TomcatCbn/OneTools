@@ -1,5 +1,5 @@
 import 'package:platform_utils/platform_command.dart';
-import 'package:platform_utils/platform_logger.dart';
+import 'package:platform_utils/platform_utils.dart';
 
 import '../cicd_errors.dart';
 import '../module.dart';
@@ -23,7 +23,14 @@ class AndroidAPKReleaseStage extends CICDStage {
     // 工作目录
     final String workDir = args[CONFIG_PIPELINE_WORKSPACE] as String;
     final Map<String, String>? env =
-    args[CONFIG_PIPELINE_ENVIRONMENT] as Map<String, String>?;
+        args[CONFIG_PIPELINE_ENVIRONMENT] as Map<String, String>?;
+
+    // 添加buildId信息
+    String buildId = args[CONFIG_PIPELINE_BUILD_ID] as String? ??
+        formatDate(DateTime.now(),
+            [yyyy, '-', mm, '-', dd, '-', HH, ':', nn, ':', ss]);
+    env?['BUILD_ID'] = buildId;
+
     var list = modules.values
         .map((e) => _createGradleTask(e, '$workDir/${e.moduleName}', env))
         .toList(growable: false);

@@ -3,16 +3,16 @@
   "projectDesc": "CEA OneSDK RPA",
   "codeRepos": [
     {
-      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/rpa/kms-core.git"
+      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/rpa/kms-core.git"
     },
     {
-      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/rpa/rpa-android.git"
+      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/rpa/rpa-android.git"
     },
     {
-      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/rpa/rpa-ios.git"
+      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/rpa/rpa-ios.git"
     },
     {
-      "repoUrl": "https://gitlab.intranet.vwg-cea.cn/iix-cloud/one-sdk/rpa/simulator.git"
+      "repoUrl": "git@gitlab.intranet.vwg-cea.cn:iix-cloud/one-sdk/rpa/simulator.git"
     }
   ]
 }
